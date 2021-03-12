@@ -30,20 +30,23 @@ public class PlanteController {
     @PostMapping(path = "/plante/create")
     @ResponseBody
     public void createPlante(@RequestBody CreatePlanteDTO planteDTO) {
-        Plante p = new Plante();
-
-        p.setNom(planteDTO.getNom());
-        p.setDescription(planteDTO.getDescription());
-        p.setDescription_courte(planteDTO.getDescription_courte());
-        p.setIcone(planteDTO.getIcone());
+        Plante p = Plante.builder()
+                .nom(planteDTO.getNom())
+                .description(planteDTO.getDescription())
+                .description_courte(planteDTO.getDescription_courte())
+                .icone(planteDTO.getIcone()).build();
 
         planteRepository.save(p);
     }
 
-    @PutMapping(path = "plante/update/{id}")
-    public ResponseEntity<Plante> updatePlante(@PathVariable Long id, @RequestBody CreatePlanteDTO planteDTO) throws NotFoundException {
-        Optional<Plante> optionalPlante = planteRepository.findById(id);
-        Plante p = optionalPlante.get();
+    @PutMapping(path = "plante/update/{planteId}")
+    public ResponseEntity<Plante> updatePlante(@PathVariable Long planteId,
+                                               @RequestBody CreatePlanteDTO planteDTO) throws NotFoundException {
+
+        Optional<Plante> planteOpt = planteRepository.findById(planteId);
+        planteOpt.orElseThrow(() -> new ResourceNotFoundException("Plante " + planteId + "not found"));
+
+        Plante p = planteOpt.get();
 
         p.setNom(planteDTO.getNom());
         p.setDescription(planteDTO.getDescription());

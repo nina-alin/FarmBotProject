@@ -9,5 +9,4 @@ import java.util.List;
 @Setter
 public class CreateChampDTO {
     private String nom;
-    //private List<CreatePlantationDTO> plantations;
 }

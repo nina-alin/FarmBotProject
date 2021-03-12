@@ -6,14 +6,22 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.Date;
 
 @Getter
 @Setter
 public class CreatePlantationDTO {
+    @Min(1)
+    @Max(6)
     private int x;
+
+    @Min(1)
+    @Max(3)
     private int y;
-    private Champ champ;
-    //private Plante plante;
+
+    private Long planteId;
 }

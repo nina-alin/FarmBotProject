@@ -33,13 +33,10 @@ public class ChampController {
     PlantationRepository plantationRepository;
 
     // ------------------------- PARTIE GET / CREATE / UPDATE / DELETE CHAMP ----------------------------
-    // TOUT FONCTIONNE sauf lorsqu'on ajoute List<Plantation>
 
     @GetMapping(path = "/champ/list")
     public List getChamps() {
         return champRepository.findAll();
-        /* problème : getChamps ne fonctionne pas si on laisse la ligne
-        private List<Plantation> plantations = new ArrayList<>() dans l'Entity */
     }
 
     @PostMapping(path = "/champ/create")

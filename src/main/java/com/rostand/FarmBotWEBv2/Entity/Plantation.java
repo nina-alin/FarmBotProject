@@ -1,14 +1,17 @@
 package com.rostand.FarmBotWEBv2.Entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Builder
 public class Plantation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,10 +26,11 @@ public class Plantation {
     @Column(name = "timestamp", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     Timestamp datePlantation;
 
-    @ManyToOne(optional = true)
+    @ManyToOne(optional = false)
+    @JsonIgnore
     private Champ champ;
 
-    /*@OneToOne(optional = true)
+    @OneToOne
     @JoinColumn(name = "plante_id")
-    private Plante plante;*/
+    private Plante plante;
 }
