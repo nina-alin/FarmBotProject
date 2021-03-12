@@ -51,7 +51,7 @@ public class PlantationController {
     }
 
 
-    @GetMapping(path = "/champ/{champId}/plantation/list/{champId}/{x}/{y}")
+    @GetMapping(path = "/champ/{champId}/plantation/list/{x}/{y}")
     public ResponseEntity<Plantation> getPlantationsById(@PathVariable(value = "champId") Long champId,
                                                          @PathVariable(value = "x") int x,
                                                          @PathVariable(value = "y") int y)
