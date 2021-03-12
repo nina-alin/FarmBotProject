@@ -49,5 +49,20 @@ public class MonitorController {
 
     // --------------------------------- PARTIE ACTIONNEURS ----------------------------------
 
-    //@PostMapping(value = "/monitor/actionneurs/pompeAEau")
+    @PostMapping(value = "/monitor/actionneurs/pompeAEau")
+    public void pompeAEau() {
+        // code Alexis
+    }
+
+    @PostMapping(value = "/monitor/actionneurs/pompeAAir")
+    public void pompeAAir() {
+        // code Alexis
+    }
+
+    @PostMapping(value = "/monitor/actionneurs/lumiere")
+    public void lumiere() {
+        // code Alexis
+    }
+
+    // --------------------------------------- CAMERA ---------------------------------------------
 }

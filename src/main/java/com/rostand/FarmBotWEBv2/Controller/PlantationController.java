@@ -41,8 +41,29 @@ public class PlantationController {
         return plantationRepository.findByChampId(champId);
     }
 
+    @GetMapping(path = "/champ/{champId}/plantation/list/{plantationId}")
+    public ResponseEntity<Plantation> getPlantationsById(@PathVariable(value = "champId") Long champId,
+                                                         @PathVariable(value = "plantationId") Long plantationId)
+            throws ResourceNotFoundException {
+        Plantation plantation = plantationRepository.findByIdAndChampId(plantationId, champId)
+                .orElseThrow(() -> new ResourceNotFoundException("Champ not found for this id :: " + champId + "and" +plantationId));
+        return ResponseEntity.ok().body(plantation);
+    }
+
+
+    @GetMapping(path = "/champ/{champId}/plantation/list/{champId}/{x}/{y}")
+    public ResponseEntity<Plantation> getPlantationsById(@PathVariable(value = "champId") Long champId,
+                                                         @PathVariable(value = "x") int x,
+                                                         @PathVariable(value = "y") int y)
+            throws ResourceNotFoundException {
+        Plantation plantation = plantationRepository.findByChampIdAndXAndY(champId, x, y)
+                .orElseThrow(() -> new ResourceNotFoundException("Champ not found for this id :: " + champId));
+        return ResponseEntity.ok().body(plantation);
+    }
+
     @PostMapping(path = "/champ/{champId}/plantation/create")
-    public Plantation createPlantation(@PathVariable(value = "champId") Long champId,@Valid @RequestBody CreatePlantationDTO plantationDTO) {
+    public Plantation createPlantation(@PathVariable(value = "champId") Long champId,
+                                       @Valid @RequestBody CreatePlantationDTO plantationDTO) {
 
 
         Optional<Champ> champOpt = champRepository.findById(champId);
@@ -58,18 +79,21 @@ public class PlantationController {
                     +plantationDTO.getX()+",Y:"+plantationDTO.getY());
         }
 
-        Plantation p = Plantation.builder()
-                .x(plantationDTO.getX())
-                .y(plantationDTO.getY())
-                .plante(planteOpt.get())
-                .champ(champOpt.get()).build();
+        Plantation p = new Plantation();
+
+        p.setX(plantationDTO.getX());
+        p.setY(plantationDTO.getY());
+        p.setPlante(planteOpt.get());
+        p.setChamp(champOpt.get());
 
         plantationRepository.save(p);
         return p;
     }
 
     @PutMapping(path = "champ/{champId}/plantation/update/{plantationId}")
-    public Plantation updatePlantation(@PathVariable(value = "champId") Long champId, @PathVariable(value = "plantationId") Long plantationId, @RequestBody CreatePlantationDTO plantationDTO) {
+    public Plantation updatePlantation(@PathVariable(value = "champId") Long champId,
+                                       @PathVariable(value = "plantationId") Long plantationId,
+                                       @RequestBody CreatePlantationDTO plantationDTO) {
 
         Optional<Champ> champOpt = champRepository.findById(champId);
         champOpt.orElseThrow(() -> new ResourceNotFoundException("Champ " + champId + "not found"));

@@ -1,6 +1,7 @@
 package com.rostand.FarmBotWEBv2.Controller;
 
 import com.rostand.FarmBotWEBv2.DTO.CreatePlanteDTO;
+import com.rostand.FarmBotWEBv2.Entity.Champ;
 import com.rostand.FarmBotWEBv2.Entity.Plantation;
 import com.rostand.FarmBotWEBv2.Entity.Plante;
 import com.rostand.FarmBotWEBv2.Exception.ResourceNotFoundException;
@@ -27,14 +28,23 @@ public class PlanteController {
         return planteRepository.findAll();
     }
 
+    @GetMapping(path = "/plante/list/{planteId}")
+    public ResponseEntity<Plante> getPlantesById(@PathVariable(value = "planteId") Long planteId)
+            throws ResourceNotFoundException {
+        Plante plante = planteRepository.findById(planteId)
+                .orElseThrow(() -> new ResourceNotFoundException("Plante not found for this id :: " + planteId));
+        return ResponseEntity.ok().body(plante);
+    }
+
     @PostMapping(path = "/plante/create")
     @ResponseBody
     public void createPlante(@RequestBody CreatePlanteDTO planteDTO) {
-        Plante p = Plante.builder()
-                .nom(planteDTO.getNom())
-                .description(planteDTO.getDescription())
-                .description_courte(planteDTO.getDescription_courte())
-                .icone(planteDTO.getIcone()).build();
+        Plante p = new Plante();
+
+        p.setNom(planteDTO.getNom());
+        p.setDescription(planteDTO.getDescription());
+        p.setDescription_courte(planteDTO.getDescription_courte());
+        p.setIcone(planteDTO.getIcone());
 
         planteRepository.save(p);
     }

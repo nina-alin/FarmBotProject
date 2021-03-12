@@ -6,10 +6,7 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Builder
 public class Plante {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

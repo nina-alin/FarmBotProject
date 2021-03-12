@@ -6,10 +6,7 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Builder
 public class Reglages {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,14 +15,17 @@ public class Reglages {
     @Column
     private int frequence_scan;
 
-    @Column
-    private int G1;
+    @OneToOne
+    @JoinColumn(name = "plante_id", insertable=false, updatable = false)
+    private Plante G1;
 
-    @Column
-    private int G2;
+    @OneToOne
+    @JoinColumn(name = "plante_id", insertable=false, updatable = false)
+    private Plante G2;
 
-    @Column
-    private int G3;
+    @OneToOne
+    @JoinColumn(name = "plante_id", insertable=false, updatable = false)
+    private Plante G3;
 
     @Column
     private int PostRefOutilX;

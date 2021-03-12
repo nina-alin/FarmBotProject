@@ -39,6 +39,15 @@ public class ChampController {
         return champRepository.findAll();
     }
 
+    @GetMapping(path = "/champ/list/{champId}")
+    public ResponseEntity<Champ> getChampsById(@PathVariable(value = "champId") Long champId)
+            throws ResourceNotFoundException {
+        Champ champ = champRepository.findById(champId)
+                .orElseThrow(() -> new ResourceNotFoundException("Champ not found for this id :: " + champId));
+        return ResponseEntity.ok().body(champ);
+    }
+
+
     @PostMapping(path = "/champ/create")
     @ResponseBody
     public void createChamp(@RequestBody CreateChampDTO champDTO) {

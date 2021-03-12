@@ -8,10 +8,7 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Builder
 public class Plantation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,11 +23,11 @@ public class Plantation {
     @Column(name = "timestamp", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     Timestamp datePlantation;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JsonIgnore
     private Champ champ;
 
-    @OneToOne
+    @OneToOne(optional = true)
     @JoinColumn(name = "plante_id")
     private Plante plante;
 }
