@@ -1,17 +1,17 @@
 package com.rostand.FarmBotWEBv2.Controller;
 
 import com.rostand.FarmBotWEBv2.DTO.CreatePlanteDTO;
-import com.rostand.FarmBotWEBv2.Entity.Champ;
-import com.rostand.FarmBotWEBv2.Entity.Plantation;
 import com.rostand.FarmBotWEBv2.Entity.Plante;
 import com.rostand.FarmBotWEBv2.Exception.ResourceNotFoundException;
 import com.rostand.FarmBotWEBv2.Repository.PlanteRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*")
@@ -23,17 +23,15 @@ public class PlanteController {
     PlanteRepository planteRepository;
 
     // ------------------------ PARTIE GET / CREATE / UPDATE / DELETE PLANTE ------------------------
-    @GetMapping(path = "/plante/list")
-    public List getPlantes() {
-        return planteRepository.findAll();
-    }
 
-    @GetMapping(path = "/plante/list/{planteId}")
-    public ResponseEntity<Plante> getPlantesById(@PathVariable(value = "planteId") Long planteId)
-            throws ResourceNotFoundException {
-        Plante plante = planteRepository.findById(planteId)
-                .orElseThrow(() -> new ResourceNotFoundException("Plante not found for this id :: " + planteId));
-        return ResponseEntity.ok().body(plante);
+    @GetMapping(path = "/plante/list")
+    public Iterable<Plante> getPlantes(@RequestParam(required = false) Long planteId) throws ResourceNotFoundException {
+
+        if(!StringUtils.isEmpty(planteId)) {
+            return planteRepository.findPlanteById(planteId);
+        }
+
+        return planteRepository.findAll();
     }
 
     @PostMapping(path = "/plante/create")
@@ -72,11 +70,4 @@ public class PlanteController {
     public void deletePlante(@PathVariable Long id) {
         planteRepository.deleteById(id);
     }
-
-    // -------------------- PARTIE GET / DELETE PLANTE BY PLANTATION ---------------
-
-   /* @GetMapping(path = "/plantation/{plantationId}/plante/list")
-    public List<Plante> getAllPlantesByPlantation(@PathVariable (value = "plantationId") Long plantationId) {
-        return planteRepository.findByPlantationId(plantationId);
-    }*/
 }

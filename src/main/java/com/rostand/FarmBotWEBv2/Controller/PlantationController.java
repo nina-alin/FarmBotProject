@@ -9,14 +9,14 @@ import com.rostand.FarmBotWEBv2.Exception.ResourceNotFoundException;
 import com.rostand.FarmBotWEBv2.Repository.ChampRepository;
 import com.rostand.FarmBotWEBv2.Repository.PlantationRepository;
 import com.rostand.FarmBotWEBv2.Repository.PlanteRepository;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*")
@@ -50,6 +50,18 @@ public class PlantationController {
         return ResponseEntity.ok().body(plantation);
     }
 
+    /*
+    @GetMapping(path = "/champ/{champId}/plantation/list")
+    public Object getPlantations(@PathVariable(value = "champId") Long champId,
+                                 @RequestParam(required = false) Map<String, String> queryParams)
+            throws ResourceNotFoundException {
+
+        if(!StringUtils.isEmpty(queryParams)) {
+            return plantationRepository.findByChampIdAndQueryParams(champId, queryParams);
+        }
+
+        return plantationRepository.findByChampId(champId);
+    }*/
 
     @GetMapping(path = "/champ/{champId}/plantation/list/{x}/{y}")
     public ResponseEntity<Plantation> getPlantationsById(@PathVariable(value = "champId") Long champId,

@@ -10,4 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface PlanteRepository extends JpaRepository<Plante, Long> {
+    List<Plante> findPlanteById(Long planteId);
 }

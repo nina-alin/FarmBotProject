@@ -4,6 +4,7 @@ import com.rostand.FarmBotWEBv2.Entity.Champ;
 import com.rostand.FarmBotWEBv2.Entity.Plante;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.repository.query.Param;
 
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Max;
