@@ -34,7 +34,7 @@ public class PlantationController {
 
     //------------------- PARTIE GET / CREATE / UPDATE / DELETE PLANTATION BY CHAMP -----------------
 
-    // problème : ajouter des exceptions
+    // problème : ajouter des exceptions + rendre planteId optionnel + isEmpty ??
     @GetMapping(path = "/champ/{champId}/plantation/list")
     public Iterable<Plantation> getPlantationsById(@PathVariable(value = "champId") Long champId,
                                                    @RequestParam(value = "x", required = false) Integer x,

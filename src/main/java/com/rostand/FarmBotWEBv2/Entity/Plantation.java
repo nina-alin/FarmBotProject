@@ -27,7 +27,7 @@ public class Plantation {
     @JsonIgnore
     private Champ champ;
 
-    @OneToOne(optional = true)
+    @OneToOne
     @JoinColumn(name = "plante_id")
     private Plante plante;
 

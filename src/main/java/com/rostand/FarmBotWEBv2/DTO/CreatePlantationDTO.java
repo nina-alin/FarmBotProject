@@ -18,7 +18,7 @@ public class CreatePlantationDTO {
     @Max(3)
     private Integer y;
 
-    private Long planteId;
-
     private Boolean libre;
+
+    private Long planteId;
 }
