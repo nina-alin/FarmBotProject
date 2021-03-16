@@ -1,61 +1,40 @@
 package com.rostand.FarmBotWEBv2.Controller;
 
 import com.rostand.FarmBotWEBv2.DTO.CreateChampDTO;
-import com.rostand.FarmBotWEBv2.DTO.CreatePlantationDTO;
 import com.rostand.FarmBotWEBv2.Entity.Champ;
-import com.rostand.FarmBotWEBv2.Entity.Plantation;
-import com.rostand.FarmBotWEBv2.Entity.Plante;
 import com.rostand.FarmBotWEBv2.Exception.ResourceNotFoundException;
 import com.rostand.FarmBotWEBv2.Repository.ChampRepository;
-import com.rostand.FarmBotWEBv2.Repository.PlantationRepository;
-import com.rostand.FarmBotWEBv2.Repository.PlanteRepository;
-import javassist.NotFoundException;
-import org.hibernate.cfg.PkDrivenByDefaultMapsIdSecondPass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @RestController
 public class ChampController {
 
-    // repositories
+    // repository
     @Autowired
     ChampRepository champRepository;
 
-    @Autowired
-    PlanteRepository planteRepository;
-
-    @Autowired
-    PlantationRepository plantationRepository;
-
     // ------------------------- PARTIE GET / CREATE / UPDATE / DELETE CHAMP ----------------------------
 
+    // GET : pour avoir la liste des champs ou un champ par id
     @GetMapping(path = "/champ/list")
-    public Iterable<Champ> getChamps(@RequestParam(required = false) Long champId)
+    public Object getChamps(@RequestParam(required = false) Long champId)
             throws ResourceNotFoundException {
 
         if(!StringUtils.isEmpty(champId)) {
-            return champRepository.findChampById(champId);
+            return champRepository.findChampById(champId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Champ non trouvé pour l'id " + champId));
         }
 
         return champRepository.findAll();
     }
 
-
-    /*@GetMapping(path = "/champ/list/{champId}")
-    public ResponseEntity<Champ> getChampsById(@PathVariable(value = "champId") Long champId)
-            throws ResourceNotFoundException {
-        Champ champ = champRepository.findById(champId)
-                .orElseThrow(() -> new ResourceNotFoundException("Champ not found for this id :: " + champId));
-        return ResponseEntity.ok().body(champ);
-    }*/
-
-
+    // POST : pour créer un nouveau champ
     @PostMapping(path = "/champ/create")
     @ResponseBody
     public void createChamp(@RequestBody CreateChampDTO champDTO) {
@@ -65,6 +44,7 @@ public class ChampController {
         champRepository.save(c);
     }
 
+    // UPDATE
     @PutMapping(path = "/champ/update/{id}")
     public ResponseEntity<Champ> updateChamp(@PathVariable Long id,
                                              @RequestBody CreateChampDTO champDTO) {
@@ -81,6 +61,7 @@ public class ChampController {
         return ResponseEntity.ok(c);
     }
 
+    // DELETE
     @PostMapping(path = "/champ/delete/{id}")
     @ResponseBody
     public void deleteChamp(@PathVariable Long id) {

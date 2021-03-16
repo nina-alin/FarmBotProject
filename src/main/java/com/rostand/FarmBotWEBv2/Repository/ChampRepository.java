@@ -4,7 +4,9 @@ import com.rostand.FarmBotWEBv2.Entity.Champ;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ChampRepository extends JpaRepository<Champ, Long> {
-    Iterable<Champ>findChampById(Long champId);
+    Optional<Champ> findChampById(Long champId);
 }

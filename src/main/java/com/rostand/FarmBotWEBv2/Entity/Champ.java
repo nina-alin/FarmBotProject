@@ -6,14 +6,10 @@ import org.hibernate.annotations.Cascade;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Builder
 public class Champ {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

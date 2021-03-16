@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*")
@@ -25,10 +23,11 @@ public class PlanteController {
     // ------------------------ PARTIE GET / CREATE / UPDATE / DELETE PLANTE ------------------------
 
     @GetMapping(path = "/plante/list")
-    public Iterable<Plante> getPlantes(@RequestParam(required = false) Long planteId) throws ResourceNotFoundException {
+    public Object getPlantes(@RequestParam(required = false) Long planteId) throws ResourceNotFoundException {
 
         if(!StringUtils.isEmpty(planteId)) {
-            return planteRepository.findPlanteById(planteId);
+            return planteRepository.findPlanteById(planteId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Plante non trouvée pour l'id " + planteId));
         }
 
         return planteRepository.findAll();

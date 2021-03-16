@@ -2,7 +2,6 @@ package com.rostand.FarmBotWEBv2.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.springframework.data.repository.query.Param;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

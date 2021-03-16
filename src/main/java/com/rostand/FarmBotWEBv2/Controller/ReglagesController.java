@@ -9,9 +9,9 @@ import com.rostand.FarmBotWEBv2.Repository.ReglagesRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*")
@@ -20,7 +20,7 @@ public class ReglagesController {
 
     // repositories
     @Autowired
-    ReglagesRepository reglagesRepo;
+    ReglagesRepository reglagesRepository;
 
     @Autowired
     PlanteRepository planteRepository;
@@ -28,16 +28,15 @@ public class ReglagesController {
     // ----------------------- PARTIE GET / CREATE / UPDATE / DELETE REGLAGES --------------------------
 
     @GetMapping(path = "/reglages/list")
-    public List getReglages() {
-        return reglagesRepo.findAll();
-    }
-
-    @GetMapping(path = "/reglages/list/{reglagesId}")
-    public ResponseEntity<Reglages> getReglagesById(@PathVariable(value = "reglagesId") Long reglagesId)
+    public Object getReglages(@RequestParam(required = false) Long reglageId)
             throws ResourceNotFoundException {
-        Reglages reglages = reglagesRepo.findById(reglagesId)
-                .orElseThrow(() -> new ResourceNotFoundException("Reglage not found for this id :: " + reglagesId));
-        return ResponseEntity.ok().body(reglages);
+
+        if(!StringUtils.isEmpty(reglageId)) {
+            return reglagesRepository.findReglagesById(reglageId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Reglage non trouvé pour l'id " + reglageId));
+        }
+
+        return reglagesRepository.findAll();
     }
 
     @PostMapping(path = "/reglages/create")
@@ -63,12 +62,14 @@ public class ReglagesController {
         r.setPostRefOutilY(reglagesDTO.getPostRefOutilY());
         r.setPostRefOutilZ(reglagesDTO.getPostRefOutilZ());
 
-        reglagesRepo.save(r);
+        reglagesRepository.save(r);
     }
 
     @PutMapping(path = "/reglages/update/{reglagesId}")
     public ResponseEntity<Reglages> updateReglages(@PathVariable Long reglagesId,
-                                                   @RequestBody CreateReglagesDTO reglagesDTO) throws NotFoundException {
+                                                   @RequestBody CreateReglagesDTO reglagesDTO)
+            throws NotFoundException {
+
         Optional<Plante> planteOpt1 = planteRepository.findById(reglagesDTO.getG1());
         planteOpt1.orElseThrow(() -> new ResourceNotFoundException("Plante " + reglagesDTO.getG1() + "not found"));
 
@@ -78,7 +79,7 @@ public class ReglagesController {
         Optional<Plante> planteOpt3 = planteRepository.findById(reglagesDTO.getG3());
         planteOpt3.orElseThrow(() -> new ResourceNotFoundException("Plante " + reglagesDTO.getG3() + "not found"));
 
-        Optional<Reglages> optionalReglages = reglagesRepo.findById(reglagesId);
+        Optional<Reglages> optionalReglages = reglagesRepository.findById(reglagesId);
         optionalReglages.orElseThrow(() -> new ResourceNotFoundException("Plantation " + reglagesId + "not found"));
 
         Reglages r = optionalReglages.get();
@@ -91,13 +92,13 @@ public class ReglagesController {
         r.setPostRefOutilY(reglagesDTO.getPostRefOutilY());
         r.setPostRefOutilZ(reglagesDTO.getPostRefOutilZ());
 
-        final Reglages updateReglages = reglagesRepo.save(r);
+        final Reglages updateReglages = reglagesRepository.save(r);
         return ResponseEntity.ok(updateReglages);
     }
 
     @PostMapping(path = "/reglages/delete/{reglagesId}")
     @ResponseBody
     public void deleteReglages(@PathVariable Long reglagesId) {
-        reglagesRepo.deleteById(reglagesId);
+        reglagesRepository.deleteById(reglagesId);
     }
 }

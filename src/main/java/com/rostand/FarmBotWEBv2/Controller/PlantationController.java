@@ -15,8 +15,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*")
@@ -36,15 +34,7 @@ public class PlantationController {
 
     //------------------- PARTIE GET / CREATE / UPDATE / DELETE PLANTATION BY CHAMP -----------------
 
-    /*@GetMapping(path = "/champ/{champId}/plantation/list/{plantationId}")
-    public ResponseEntity<Plantation> getPlantationsById(@PathVariable(value = "champId") Long champId,
-                                                         @PathVariable(value = "plantationId") Long plantationId)
-            throws ResourceNotFoundException {
-        Plantation plantation = plantationRepository.findByIdAndChampId(plantationId, champId)
-                .orElseThrow(() -> new ResourceNotFoundException("Champ not found for this id :: " + champId + "and" +plantationId));
-        return ResponseEntity.ok().body(plantation);
-    }*/
-
+    // problème : ajouter des exceptions
     @GetMapping(path = "/champ/{champId}/plantation/list")
     public Iterable<Plantation> getPlantationsById(@PathVariable(value = "champId") Long champId,
                                                    @RequestParam(value = "x", required = false) Integer x,
@@ -57,17 +47,16 @@ public class PlantationController {
         return plantationRepository.findByChampId(champId);
     }
 
+    // POST : pour créer une nouvelle plantation selon le champId
     @PostMapping(path = "/champ/{champId}/plantation/create")
     public Plantation createPlantation(@PathVariable(value = "champId") Long champId,
                                        @Valid @RequestBody CreatePlantationDTO plantationDTO) {
-
 
         Optional<Champ> champOpt = champRepository.findById(champId);
         champOpt.orElseThrow(() -> new ResourceNotFoundException("Champ " + champId + "not found"));
 
         Optional<Plante> planteOpt = planteRepository.findById(plantationDTO.getPlanteId());
         planteOpt.orElseThrow(() -> new ResourceNotFoundException("Plante " + plantationDTO.getPlanteId() + "not found"));
-
 
         // Vérifier qu'une plantation n'existe pas déjà à ces coordonnées.
         if (plantationRepository.checkAlreadyExist(champId, plantationDTO.getX(), plantationDTO.getY())){
@@ -86,6 +75,7 @@ public class PlantationController {
         return p;
     }
 
+    // UPDATE : selon champId et plantationId
     @PutMapping(path = "champ/{champId}/plantation/update/{plantationId}")
     public Plantation updatePlantation(@PathVariable(value = "champId") Long champId,
                                        @PathVariable(value = "plantationId") Long plantationId,
@@ -100,11 +90,10 @@ public class PlantationController {
         Optional<Plante> planteOpt = planteRepository.findById(plantationDTO.getPlanteId());
         planteOpt.orElseThrow(() -> new ResourceNotFoundException("Plante " + plantationDTO.getPlanteId() + "not found"));
 
-
         Plantation p = plantationOpt.get();
 
         if (!p.getChamp().getId().equals(champId)){
-            throw new BadRequestException("Le champ de la plantation("+p.getChamp().getNom()+") ne correspond pas au champ en paramètre("+champOpt.get().getNom()+")");
+            throw new BadRequestException("Le champ de la plantation(" + p.getChamp().getNom() + ") ne correspond pas au champ en paramètres (" +champOpt.get().getNom()+ ")");
         }
 
         p.setX(plantationDTO.getX());
@@ -115,6 +104,7 @@ public class PlantationController {
         return p;
     }
 
+    // DELETE : selon champId et plantationId
     @DeleteMapping(path = "/champ/{champId}/plantation/delete/{plantationId}")
     public ResponseEntity<?> deletePlantation(@PathVariable(value = "plantationId") Long plantationId,
                                               @PathVariable(value = "champId") Long champId) {
