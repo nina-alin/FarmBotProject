@@ -19,4 +19,6 @@ public class CreatePlantationDTO {
     private Integer y;
 
     private Long planteId;
+
+    private Boolean libre;
 }

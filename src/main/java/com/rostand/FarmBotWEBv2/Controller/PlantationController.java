@@ -70,6 +70,7 @@ public class PlantationController {
         p.setY(plantationDTO.getY());
         p.setPlante(planteOpt.get());
         p.setChamp(champOpt.get());
+        p.setLibre(plantationDTO.getLibre());
 
         plantationRepository.save(p);
         return p;
@@ -99,6 +100,7 @@ public class PlantationController {
         p.setX(plantationDTO.getX());
         p.setY(plantationDTO.getY());
         p.setPlante(planteOpt.get());
+        p.setLibre(plantationDTO.getLibre());
 
         plantationRepository.save(p);
         return p;
