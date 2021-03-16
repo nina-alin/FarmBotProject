@@ -16,10 +16,10 @@ public class Plantation {
     Long id;
 
     @Column
-    int x;
+    Integer x;
 
     @Column
-    int y;
+    Integer y;
 
     @Column(name = "timestamp", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     Timestamp datePlantation;

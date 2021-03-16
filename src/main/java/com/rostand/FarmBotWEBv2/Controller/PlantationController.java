@@ -36,41 +36,25 @@ public class PlantationController {
 
     //------------------- PARTIE GET / CREATE / UPDATE / DELETE PLANTATION BY CHAMP -----------------
 
-    @GetMapping(path = "/champ/{champId}/plantation/list")
-    public List<Plantation> getAllPlantationByChampId(@PathVariable(value = "champId") Long champId) {
-        return plantationRepository.findByChampId(champId);
-    }
-
-    @GetMapping(path = "/champ/{champId}/plantation/list/{plantationId}")
+    /*@GetMapping(path = "/champ/{champId}/plantation/list/{plantationId}")
     public ResponseEntity<Plantation> getPlantationsById(@PathVariable(value = "champId") Long champId,
                                                          @PathVariable(value = "plantationId") Long plantationId)
             throws ResourceNotFoundException {
         Plantation plantation = plantationRepository.findByIdAndChampId(plantationId, champId)
                 .orElseThrow(() -> new ResourceNotFoundException("Champ not found for this id :: " + champId + "and" +plantationId));
         return ResponseEntity.ok().body(plantation);
-    }
+    }*/
 
-    /*
     @GetMapping(path = "/champ/{champId}/plantation/list")
-    public Object getPlantations(@PathVariable(value = "champId") Long champId,
-                                 @RequestParam(required = false) Map<String, String> queryParams)
+    public Iterable<Plantation> getPlantationsById(@PathVariable(value = "champId") Long champId,
+                                                   @RequestParam(value = "x", required = false) Integer x,
+                                                   @RequestParam(value = "y", required = false) Integer y)
             throws ResourceNotFoundException {
-
-        if(!StringUtils.isEmpty(queryParams)) {
-            return plantationRepository.findByChampIdAndQueryParams(champId, queryParams);
+        if(!StringUtils.isEmpty(x)&&!StringUtils.isEmpty(y)) {
+            return plantationRepository.findByChampIdAndXAndY(champId, x, y);
         }
 
         return plantationRepository.findByChampId(champId);
-    }*/
-
-    @GetMapping(path = "/champ/{champId}/plantation/list/{x}/{y}")
-    public ResponseEntity<Plantation> getPlantationsById(@PathVariable(value = "champId") Long champId,
-                                                         @PathVariable(value = "x") int x,
-                                                         @PathVariable(value = "y") int y)
-            throws ResourceNotFoundException {
-        Plantation plantation = plantationRepository.findByChampIdAndXAndY(champId, x, y)
-                .orElseThrow(() -> new ResourceNotFoundException("Champ not found for this id :: " + champId));
-        return ResponseEntity.ok().body(plantation);
     }
 
     @PostMapping(path = "/champ/{champId}/plantation/create")

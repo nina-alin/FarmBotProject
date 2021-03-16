@@ -11,10 +11,9 @@ import java.util.Optional;
 
 @Repository
 public interface PlantationRepository extends JpaRepository<Plantation, Long> {
-    List<Plantation> findByChampId(Long champId);
+    Iterable<Plantation> findByChampId(Long champId);
     Optional<Plantation> findByIdAndChampId(Long plantationId, Long champId);
-    Optional<Plantation> findByChampIdAndXAndY(Long champId, int x, int y);
-    //Optional<Plantation> findByChampIdAndQueryParams(Long champId, Map<String, String> queryParams);
+    Iterable<Plantation> findByChampIdAndXAndY(Long champId, Integer x, Integer y);
 
     @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END from Plantation p where p.champ.id = :champId and p.x = :x and p.y = :y")
     Boolean checkAlreadyExist(Long champId, int x, int y);

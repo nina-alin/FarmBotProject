@@ -18,11 +18,11 @@ import java.util.Date;
 public class CreatePlantationDTO {
     @Min(1)
     @Max(6)
-    private int x;
+    private Integer x;
 
     @Min(1)
     @Max(3)
-    private int y;
+    private Integer y;
 
     private Long planteId;
 }

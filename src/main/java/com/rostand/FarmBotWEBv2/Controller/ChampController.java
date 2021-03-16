@@ -13,6 +13,7 @@ import javassist.NotFoundException;
 import org.hibernate.cfg.PkDrivenByDefaultMapsIdSecondPass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,17 +36,24 @@ public class ChampController {
     // ------------------------- PARTIE GET / CREATE / UPDATE / DELETE CHAMP ----------------------------
 
     @GetMapping(path = "/champ/list")
-    public List getChamps() {
+    public Iterable<Champ> getChamps(@RequestParam(required = false) Long champId)
+            throws ResourceNotFoundException {
+
+        if(!StringUtils.isEmpty(champId)) {
+            return champRepository.findChampById(champId);
+        }
+
         return champRepository.findAll();
     }
 
-    @GetMapping(path = "/champ/list/{champId}")
+
+    /*@GetMapping(path = "/champ/list/{champId}")
     public ResponseEntity<Champ> getChampsById(@PathVariable(value = "champId") Long champId)
             throws ResourceNotFoundException {
         Champ champ = champRepository.findById(champId)
                 .orElseThrow(() -> new ResourceNotFoundException("Champ not found for this id :: " + champId));
         return ResponseEntity.ok().body(champ);
-    }
+    }*/
 
 
     @PostMapping(path = "/champ/create")
