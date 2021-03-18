@@ -1,72 +1,95 @@
 package com.rostand.FarmBotWEBv2.Controller;
 
+import com.rostand.FarmBotWEBv2.SerialCommunication.SerialFarmBot;
+import jssc.SerialPortException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 public class MonitorController {
 
-    // -------------------------------- PARTIE AXE X ---------------------------------
+        // -------------------------------- PARTIE AXE X ---------------------------------
 
-    @GetMapping(value = "/monitor/axeX/getPositionAxeX")
-    public int getPositionAxeX() {
-        // code Alexis
-        int p=0;
-        return p;
-    }
+        @GetMapping(value = "/monitor/axeX/getPositionAxeX")
+        public int getPositionAxeX () {
 
-    @PostMapping(value = "/monitor/axeX/deplacePositionAxeX")
-    public void deplacePositionAxeX() {
-        // code Alexis
-    }
+            SerialFarmBot farmbot;
+            int posX = 0, posY = 0, posZ = 0;
+            String shell = System.getenv("SHELL");
 
-    // -------------------------------- PARTIE AXE Y ---------------------------------
+            try {
+                farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+            } catch (Exception er) {
+                er.printStackTrace();
+            }
 
-    @GetMapping(value = "/monitor/axeY/getPositionAxeY")
-    public int getPositionAxeY() {
-        // code Alexis
-        int p=0;
-        return p;
-    }
+            // code Alexis
+            int p = 0;
+            return p;
+        }
 
-    @PostMapping(value = "/monitor/axeY/deplacePositionAxeY")
-    public void deplacePositionAxeY() {
-        // code Alexis
-    }
+        @PostMapping(value = "/monitor/axeX/deplacePositionAxeX")
+        public void deplacePositionAxeX () {
+            // code Alexis
+        }
 
-    // -------------------------------- PARTIE AXE Z ---------------------------------
+        // -------------------------------- PARTIE AXE Y ---------------------------------
 
-    @GetMapping(value = "/monitor/axeZ/getPositionAxeZ")
-    public int getPositionAxeZ() {
-        // code Alexis
-        int p=0;
-        return p;
-    }
+        @GetMapping(value = "/monitor/axeY/getPositionAxeY")
+        public int getPositionAxeY () {
+            // code Alexis
+            int p = 0;
+            return p;
+        }
 
-    @PostMapping(value = "/monitor/axeZ/deplacePositionAxeZ")
-    public void deplacePositionAxeZ() {
-        // code Alexis
-    }
+        @PostMapping(value = "/monitor/axeY/deplacePositionAxeY")
+        public void deplacePositionAxeY () {
+            // code Alexis
+        }
 
-    // --------------------------------- PARTIE ACTIONNEURS ----------------------------------
+        // -------------------------------- PARTIE AXE Z ---------------------------------
 
-    @PostMapping(value = "/monitor/actionneurs/pompeAEau")
-    public void pompeAEau() {
-        // code Alexis
-    }
+        @GetMapping(value = "/monitor/axeZ/getPositionAxeZ")
+        public int getPositionAxeZ () {
+            // code Alexis
+            int p = 0;
+            return p;
+        }
 
-    @PostMapping(value = "/monitor/actionneurs/pompeAAir")
-    public void pompeAAir() {
-        // code Alexis
-    }
+        @PostMapping(value = "/monitor/axeZ/deplacePositionAxeZ")
+        public void deplacePositionAxeZ () {
+            // code Alexis
+        }
 
-    @PostMapping(value = "/monitor/actionneurs/lumiere")
-    public void lumiere() {
-        // code Alexis
-    }
+        // --------------------------------- PARTIE ACTIONNEURS ----------------------------------
 
-    // --------------------------------------- CAMERA ---------------------------------------------
+        @PostMapping(value = "/monitor/actionneurs/pompeAEau")
+        public void pompeAEau () {
+            // code Alexis
+        }
 
-    // ---------------------------------------- OUTILS ---------------------------------------------
+        @PostMapping(value = "/monitor/actionneurs/pompeAAir")
+        public void pompeAAir () {
+            // code Alexis
+        }
 
+        @PostMapping(value = "/monitor/actionneurs/lumiere/on")
+        public void lumiereOn () throws SerialPortException {
+
+            SerialFarmBot farmbot = null;
+            int posX = 0, posY = 0, posZ = 0;
+            String shell = System.getenv("SHELL");
+
+            try {
+                farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+            } catch (Exception er) {
+                er.printStackTrace();
+            }
+
+            farmbot.envoyerOrdre("F41 P7 V1 M0 Q0");
+        }
+
+        // --------------------------------------- CAMERA ---------------------------------------------
+
+        // ---------------------------------------- OUTILS ---------------------------------------------
 
 }
