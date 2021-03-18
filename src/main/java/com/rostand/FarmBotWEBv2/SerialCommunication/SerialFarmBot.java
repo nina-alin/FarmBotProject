@@ -3,9 +3,6 @@ package com.rostand.FarmBotWEBv2.SerialCommunication;
 import jssc.SerialPort;
 import jssc.SerialPortException;
 
-import java.nio.charset.StandardCharsets;
-import java.sql.Time;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +25,7 @@ public class SerialFarmBot {
         return X;
     }
 
-    public class FarmotReaderThread implements Runnable {
+    public class FarmBotReaderThread implements Runnable {
 
         @Override
         public void run() {
@@ -129,7 +126,7 @@ public class SerialFarmBot {
         }
 
         // Je lance le thread de lecture
-        Thread t = new Thread(new FarmotReaderThread());
+        Thread t = new Thread(new FarmBotReaderThread());
         t.start();
         // Il faut attendre le démarrage du farmbot (soit on attends 5s soit on attends la reception de la trame R99
         String firstMessage;
