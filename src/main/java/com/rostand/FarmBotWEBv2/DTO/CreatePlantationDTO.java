@@ -1,5 +1,6 @@
 package com.rostand.FarmBotWEBv2.DTO;
 
+import com.sun.istack.Nullable;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +19,6 @@ public class CreatePlantationDTO {
     @Max(3)
     private Integer y;
 
-    private Boolean libre;
-
+    @Nullable
     private Long planteId;
 }

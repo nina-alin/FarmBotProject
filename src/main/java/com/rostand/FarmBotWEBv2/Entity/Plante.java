@@ -17,10 +17,4 @@ public class Plante {
 
     @Column
     String description;
-
-    @Column
-    String description_courte;
-
-    @Column
-    String icone;
 }

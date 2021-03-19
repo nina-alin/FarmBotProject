@@ -11,10 +11,12 @@ import com.rostand.FarmBotWEBv2.Repository.PlantationRepository;
 import com.rostand.FarmBotWEBv2.Repository.PlanteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*")
@@ -36,12 +38,18 @@ public class PlantationController {
 
     // problème : ajouter des exceptions + rendre planteId optionnel + isEmpty ??
     @GetMapping(path = "/champ/{champId}/plantation/list")
-    public Iterable<Plantation> getPlantationsById(@PathVariable(value = "champId") Long champId,
-                                                   @RequestParam(value = "x", required = false) Integer x,
-                                                   @RequestParam(value = "y", required = false) Integer y)
+    public List<Plantation> getPlantationsById(@PathVariable(value = "champId") Long champId,
+                                             @RequestParam(value = "x", required = false) Integer x,
+                                             @RequestParam(value = "y", required = false) Integer y)
             throws ResourceNotFoundException {
-        if(!StringUtils.isEmpty(x)&&!StringUtils.isEmpty(y)) {
-            return plantationRepository.findByChampIdAndXAndY(champId, x, y);
+
+        champRepository.findChampById(champId).orElseThrow(() -> new ResourceNotFoundException("Champ non trouvé pour l'id " + champId));
+
+        if(!ObjectUtils.isEmpty(x)&&!ObjectUtils.isEmpty(y)) {
+            List list = plantationRepository.findByChampIdAndXAndY(champId, x, y);
+            if (list.size()==0) {
+                throw new ResourceNotFoundException("Plantation non trouvée pour x = " + x + "et y = " + y);
+            }
         }
 
         return plantationRepository.findByChampId(champId);
@@ -55,8 +63,13 @@ public class PlantationController {
         Optional<Champ> champOpt = champRepository.findById(champId);
         champOpt.orElseThrow(() -> new ResourceNotFoundException("Champ " + champId + "not found"));
 
-        Optional<Plante> planteOpt = planteRepository.findById(plantationDTO.getPlanteId());
-        planteOpt.orElseThrow(() -> new ResourceNotFoundException("Plante " + plantationDTO.getPlanteId() + "not found"));
+        Plante selectedPlante = null;
+
+        if (plantationDTO.getPlanteId()!=null) {
+            Optional<Plante> planteOpt = planteRepository.findById(plantationDTO.getPlanteId());
+            planteOpt.orElseThrow(() -> new ResourceNotFoundException("Plante " + plantationDTO.getPlanteId() + "not found"));
+            selectedPlante = planteOpt.get();
+        }
 
         // Vérifier qu'une plantation n'existe pas déjà à ces coordonnées.
         if (plantationRepository.checkAlreadyExist(champId, plantationDTO.getX(), plantationDTO.getY())){
@@ -68,9 +81,8 @@ public class PlantationController {
 
         p.setX(plantationDTO.getX());
         p.setY(plantationDTO.getY());
-        p.setPlante(planteOpt.get());
+        p.setPlante(selectedPlante);
         p.setChamp(champOpt.get());
-        p.setLibre(plantationDTO.getLibre());
 
         plantationRepository.save(p);
         return p;
@@ -100,7 +112,6 @@ public class PlantationController {
         p.setX(plantationDTO.getX());
         p.setY(plantationDTO.getY());
         p.setPlante(planteOpt.get());
-        p.setLibre(plantationDTO.getLibre());
 
         plantationRepository.save(p);
         return p;

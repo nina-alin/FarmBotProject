@@ -9,6 +9,7 @@ import com.rostand.FarmBotWEBv2.Repository.ReglagesRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,7 @@ public class ReglagesController {
     public Object getReglages(@RequestParam(required = false) Long reglageId)
             throws ResourceNotFoundException {
 
-        if(!StringUtils.isEmpty(reglageId)) {
+        if(!ObjectUtils.isEmpty(reglageId)) {
             return reglagesRepository.findReglagesById(reglageId)
                     .orElseThrow(() -> new ResourceNotFoundException("Reglage non trouvé pour l'id " + reglageId));
         }

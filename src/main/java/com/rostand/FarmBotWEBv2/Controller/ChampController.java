@@ -6,6 +6,7 @@ import com.rostand.FarmBotWEBv2.Exception.ResourceNotFoundException;
 import com.rostand.FarmBotWEBv2.Repository.ChampRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class ChampController {
     public Object getChamps(@RequestParam(required = false) Long champId)
             throws ResourceNotFoundException {
 
-        if(!StringUtils.isEmpty(champId)) {
+        if(!ObjectUtils.isEmpty(champId)) {
             return champRepository.findChampById(champId)
                     .orElseThrow(() -> new ResourceNotFoundException("Champ non trouvé pour l'id " + champId));
         }

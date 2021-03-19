@@ -7,6 +7,7 @@ import com.rostand.FarmBotWEBv2.Repository.PlanteRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,7 @@ public class PlanteController {
     @GetMapping(path = "/plante/list")
     public Object getPlantes(@RequestParam(required = false) Long planteId) throws ResourceNotFoundException {
 
-        if(!StringUtils.isEmpty(planteId)) {
+        if(!ObjectUtils.isEmpty(planteId)) {
             return planteRepository.findPlanteById(planteId)
                     .orElseThrow(() -> new ResourceNotFoundException("Plante non trouvée pour l'id " + planteId));
         }
@@ -40,8 +41,6 @@ public class PlanteController {
 
         p.setNom(planteDTO.getNom());
         p.setDescription(planteDTO.getDescription());
-        p.setDescription_courte(planteDTO.getDescription_courte());
-        p.setIcone(planteDTO.getIcone());
 
         planteRepository.save(p);
     }
@@ -57,8 +56,6 @@ public class PlanteController {
 
         p.setNom(planteDTO.getNom());
         p.setDescription(planteDTO.getDescription());
-        p.setDescription_courte(planteDTO.getDescription_courte());
-        p.setIcone(planteDTO.getIcone());
 
         final Plante updatePlante = planteRepository.save(p);
         return ResponseEntity.ok(p);

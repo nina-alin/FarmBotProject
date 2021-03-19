@@ -30,7 +30,4 @@ public class Plantation {
     @OneToOne
     @JoinColumn(name = "plante_id")
     private Plante plante;
-
-    @Column
-    Boolean libre;
 }
