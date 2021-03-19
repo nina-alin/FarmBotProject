@@ -36,20 +36,14 @@ public class PlantationController {
 
     //------------------- PARTIE GET / CREATE / UPDATE / DELETE PLANTATION BY CHAMP -----------------
 
-    // problème : ajouter des exceptions + rendre planteId optionnel + isEmpty ??
     @GetMapping(path = "/champ/{champId}/plantation/list")
     public List<Plantation> getPlantationsById(@PathVariable(value = "champId") Long champId,
                                              @RequestParam(value = "x", required = false) Integer x,
                                              @RequestParam(value = "y", required = false) Integer y)
             throws ResourceNotFoundException {
 
-        champRepository.findChampById(champId).orElseThrow(() -> new ResourceNotFoundException("Champ non trouvé pour l'id " + champId));
-
-        if(!ObjectUtils.isEmpty(x)&&!ObjectUtils.isEmpty(y)) {
-            List list = plantationRepository.findByChampIdAndXAndY(champId, x, y);
-            if (list.size()==0) {
-                throw new ResourceNotFoundException("Plantation non trouvée pour x = " + x + "et y = " + y);
-            }
+        if(!ObjectUtils.isEmpty(champId)) {
+            return plantationRepository.findByChampIdAndXAndY(champId, x, y);
         }
 
         return plantationRepository.findByChampId(champId);
