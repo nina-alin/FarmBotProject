@@ -37,12 +37,11 @@ public class PlantationController {
     //------------------- PARTIE GET / CREATE / UPDATE / DELETE PLANTATION BY CHAMP -----------------
 
     @GetMapping(path = "/champ/{champId}/plantation/list")
-    public List<Plantation> getPlantationsById(@PathVariable(value = "champId") Long champId,
-                                             @RequestParam(value = "x", required = false) Integer x,
-                                             @RequestParam(value = "y", required = false) Integer y)
+    public Iterable<Plantation> getPlantationsById(@PathVariable(value = "champId") Long champId,
+                                                   @RequestParam(value = "x", required = false) Integer x,
+                                                   @RequestParam(value = "y", required = false) Integer y)
             throws ResourceNotFoundException {
-
-        if(!ObjectUtils.isEmpty(champId)) {
+        if(!ObjectUtils.isEmpty(x)&&!ObjectUtils.isEmpty(y)) {
             return plantationRepository.findByChampIdAndXAndY(champId, x, y);
         }
 
