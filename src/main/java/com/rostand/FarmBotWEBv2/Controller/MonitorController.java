@@ -18,84 +18,180 @@ public class MonitorController {
 
     // -------------------------------- PARTIE AXE X ---------------------------------
 
-        @GetMapping(value = "/monitor/axeX/getPositionAxeX")
-        public int getPositionAxeX () {
+    @GetMapping(value = "/monitor/axeX/getPositionAxeX")
+    public int getPositionAxeX () {
+        SerialFarmBot farmbot=null;
+        int posX = 0, posY = 0, posZ = 0;
+        String shell = System.getenv("SHELL");
 
-            SerialFarmBot farmbot;
-            int posX = 0, posY = 0, posZ = 0;
-            String shell = System.getenv("SHELL");
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
 
-            try {
-                farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
-            } catch (Exception er) {
-                er.printStackTrace();
-            }
+        // code Alexis
+        int p = 0;
+        return p;
+    }
 
+    @PostMapping(value = "/monitor/axeX/deplacePositionAxeX/up")
+    public void deplacePositionAxeXUp () {
+        SerialFarmBot farmbot=null;
+        int posX = 0, posY = 0, posZ = 0;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+
+        posX += 100;
+        farmbot.gotoXYZ(posX, posY, posZ);
+    }
+
+    @PostMapping(value = "/monitor/axeX/deplacePositionAxeX/down")
+    public void deplacePositionAxeXDown () {
+        SerialFarmBot farmbot=null;
+        int posX = 0, posY = 0, posZ = 0;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+
+        posX -= 100;
+        farmbot.gotoXYZ(posX, posY, posZ);
+    }
+
+    // -------------------------------- PARTIE AXE Y ---------------------------------
+
+    @GetMapping(value = "/monitor/axeY/getPositionAxeY")
+    public int getPositionAxeY () {
             // code Alexis
             int p = 0;
             return p;
         }
 
-        @PostMapping(value = "/monitor/axeX/deplacePositionAxeX")
-        public void deplacePositionAxeX () {
-            // code Alexis
+    @PostMapping(value = "/monitor/axeY/deplacePositionAxeY/up")
+    public void deplacePositionAxeYUp () {
+        SerialFarmBot farmbot = null;
+        int posX = 0, posY = 0, posZ = 0;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
         }
 
-        // -------------------------------- PARTIE AXE Y ---------------------------------
+        posY += 50;
+        farmbot.gotoXYZ(posX, posY, posZ);
+    }
 
-        @GetMapping(value = "/monitor/axeY/getPositionAxeY")
-        public int getPositionAxeY () {
-            // code Alexis
-            int p = 0;
-            return p;
+    @PostMapping(value = "/monitor/axeY/deplacePositionAxeY/down")
+    public void deplacePositionAxeYDown () {
+        SerialFarmBot farmbot = null;
+        int posX = 0, posY = 0, posZ = 0;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
         }
 
-        @PostMapping(value = "/monitor/axeY/deplacePositionAxeY")
-        public void deplacePositionAxeY () {
-            // code Alexis
-        }
+        posY -= 50;
+        farmbot.gotoXYZ(posX, posY, posZ);
+    }
 
         // -------------------------------- PARTIE AXE Z ---------------------------------
 
-        @GetMapping(value = "/monitor/axeZ/getPositionAxeZ")
-        public int getPositionAxeZ () {
-            // code Alexis
-            int p = 0;
-            return p;
+    @GetMapping(value = "/monitor/axeZ/getPositionAxeZ")
+    public int getPositionAxeZ () {
+        // code Alexis
+        int p = 0;
+        return p;
+    }
+
+    @PostMapping(value = "/monitor/axeZ/deplacePositionAxeZ/up")
+    public void deplacePositionAxeZUp () {
+        SerialFarmBot farmbot = null;
+        int posX = 0, posY = 0, posZ = 0;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
         }
 
-        @PostMapping(value = "/monitor/axeZ/deplacePositionAxeZ")
-        public void deplacePositionAxeZ () {
-            // code Alexis
+        posZ += 10;
+        farmbot.gotoXYZ(posX, posY, posZ);
+    }
+
+    @PostMapping(value = "/monitor/axeZ/deplacePositionAxeZ/down")
+    public void deplacePositionAxeZDown () {
+        SerialFarmBot farmbot = null;
+        int posX = 0, posY = 0, posZ = 0;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
         }
 
-        // --------------------------------- PARTIE ACTIONNEURS ----------------------------------
+        posZ -= 10;
+        farmbot.gotoXYZ(posX, posY, posZ);
+    }
 
-        @PostMapping(value = "/monitor/actionneurs/pompeAEau")
-        public void pompeAEau () {
-            // code Alexis
+    // ------------------------------------- PARTIE DEPLACEMENT CASES ------------------------------
+
+    @PostMapping(value = "/monitor/deplacerCase/A1")
+    public void deplacerCaseA1() {
+        SerialFarmBot farmbot = null;
+        int posX = 0, posY = 0, posZ = 0;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
         }
 
-        @PostMapping(value = "/monitor/actionneurs/pompeAAir")
-        public void pompeAAir () {
-            // code Alexis
+        farmbot.gotoXYZ(300, 1050, posZ);
+    }
+
+    // --------------------------------- PARTIE ACTIONNEURS ----------------------------------
+
+    @PostMapping(value = "/monitor/actionneurs/pompeAEau")
+    public void pompeAEau () {
+        // code Alexis
+    }
+
+    @PostMapping(value = "/monitor/actionneurs/pompeAAir")
+    public void pompeAAir () {
+        // code Alexis
+    }
+
+    @PostMapping(value = "/monitor/actionneurs/lumiere/on")
+    public void lumiereOn () throws SerialPortException {
+        SerialFarmBot farmbot = null;
+        int posX = 0, posY = 0, posZ = 0;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
         }
 
-        @PostMapping(value = "/monitor/actionneurs/lumiere/on")
-        public void lumiereOn () throws SerialPortException {
-
-            SerialFarmBot farmbot = null;
-            int posX = 0, posY = 0, posZ = 0;
-            String shell = System.getenv("SHELL");
-
-            try {
-                farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
-            } catch (Exception er) {
-                er.printStackTrace();
-            }
-
-            farmbot.envoyerOrdre("F41 P7 V1 M0 Q0");
-        }
+        farmbot.envoyerOrdre("F41 P7 V1 M0 Q0");
+    }
 
     @PostMapping(value = "/monitor/actionneurs/lumiere/off")
     public void lumiereOff () throws SerialPortException {
@@ -113,8 +209,8 @@ public class MonitorController {
         farmbot.envoyerOrdre("F41 P7 V0 M0 Q0");
     }
 
-        // --------------------------------------- CAMERA ---------------------------------------------
+    // --------------------------------------- CAMERA ---------------------------------------------
 
-        // ---------------------------------------- OUTILS ---------------------------------------------
+    // ---------------------------------------- OUTILS ---------------------------------------------
 
 }

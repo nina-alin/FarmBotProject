@@ -6,14 +6,12 @@ import jssc.SerialPortException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+// la classe principale qui permet de faire la communication en série
 public class SerialFarmBot {
 
+    // initialisation des variables de classe
     private SerialPort serialPort;
-
     private List<String> currentBuffer = new ArrayList<>();
-
-    // Singleton instance
     private static SerialFarmBot _instance = null;
     private boolean isStarted = false;
     private String statusCommand = "R00";
@@ -79,6 +77,7 @@ public class SerialFarmBot {
     public String readStringFarmBot() throws SerialPortException {
         String reponse = "";
         String s = "";
+
         while (s.compareTo("\n") != 0) {
             s = serialPort.readString(1);
             if (s != null) {
@@ -88,14 +87,14 @@ public class SerialFarmBot {
         }
         return reponse;
     }
+
     public void envoyerOrdre(String ordre) throws SerialPortException {
         envoyerOrdre(ordre,3000);
     }
+
     public void envoyerOrdre(String ordre,int timeOut) throws SerialPortException {
         String rep = "";
-
         statusCommand = "R00";
-
         serialPort.writeString(ordre + "\r\n");
 
         long start= System.currentTimeMillis();
@@ -116,8 +115,8 @@ public class SerialFarmBot {
 
     private SerialFarmBot(String port) throws SerialPortException, InterruptedException {
         serialPort = new SerialPort(port);
-        serialPort.openPort();//Open serial port
-        serialPort.setParams(115200, 8, 1, 0);//Set params.*/
+        serialPort.openPort(); // Open serial port
+        serialPort.setParams(115200, 8, 1, 0); //Set params
         serialPort.writeString("\r\n");
 
         if (!serialPort.isOpened()) {
@@ -128,8 +127,10 @@ public class SerialFarmBot {
         // Je lance le thread de lecture
         Thread t = new Thread(new FarmBotReaderThread());
         t.start();
+
         // Il faut attendre le démarrage du farmbot (soit on attends 5s soit on attends la reception de la trame R99
         String firstMessage;
+
         do {
             System.out.println("********************isstarted*****************");
             Thread.sleep(500);
@@ -151,8 +152,6 @@ public class SerialFarmBot {
         envoyerOrdre("F22 P66 V200");
         envoyerOrdre("F22 P67 V200");
         System.out.println("**********************Startup completed********************");
-
-
     }
 
     public static SerialFarmBot getInstance(String port) throws SerialPortException, InterruptedException {
