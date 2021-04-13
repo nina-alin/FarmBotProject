@@ -10,7 +10,6 @@ import javax.validation.constraints.Min;
 @Getter
 @Setter
 public class CreatePlantationDTO {
-
     @Min(1)
     @Max(6)
     private Integer x;
