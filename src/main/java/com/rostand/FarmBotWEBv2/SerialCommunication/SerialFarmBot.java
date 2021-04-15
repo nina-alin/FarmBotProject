@@ -52,14 +52,14 @@ public class SerialFarmBot {
                         statusCommand = "R04";
                     }
                     if (line.contains("R82")){
-                        String[] tab= line.split(" "); //Split "R82 X-4.2 Y32.3 Z40.0
-                        String sX = tab[1].substring(1); //"X-4.2" -> "-4.2"
+                        String[] tab= line.split(" "); // Split "R82 X-4.2 Y32.3 Z40.0
+                        String sX = tab[1].substring(1); // "X-4.2" devient "-4.2"
                         // sX=sX.replace(".",",");
                         X = Double.valueOf(sX);
-                        String sY = tab[2].substring(1); //"X-4.2" -> "-4.2"
+                        String sY = tab[2].substring(1); //"Y-4.2" -> "-4.2"
                         // sY=sY.replace(".",",");
                         Y = Double.valueOf(sY);
-                        String sZ = tab[3].substring(1); //"X-4.2" -> "-4.2"
+                        String sZ = tab[3].substring(1); //"Z-4.2" -> "-4.2"
                         // sZ=sZ.replace(".",",");
                         Z = Double.valueOf(sX);
                     }
@@ -128,7 +128,7 @@ public class SerialFarmBot {
         Thread t = new Thread(new FarmBotReaderThread());
         t.start();
 
-        // Il faut attendre le démarrage du farmbot (soit on attends 5s soit on attends la reception de la trame R99
+        // Il faut attendre le démarrage du farmbot (soit on attend 5s soit on attends la reception de la trame R99)
         String firstMessage;
 
         do {
@@ -163,6 +163,7 @@ public class SerialFarmBot {
         return _instance;
     }
 
+    // fonction qui permet d'aller à des coordonnées spécifiques
     public void gotoXYZ(int x, int y, int z) {
         String sx = String.valueOf(x);
         String sy = String.valueOf(y);

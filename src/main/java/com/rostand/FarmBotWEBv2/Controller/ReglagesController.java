@@ -10,7 +10,6 @@ import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -59,9 +58,9 @@ public class ReglagesController {
         r.setG1(planteOpt1.get());
         r.setG2(planteOpt2.get());
         r.setG3(planteOpt3.get());
-        r.setPostRefOutilX(reglagesDTO.getPostRefOutilX());
-        r.setPostRefOutilY(reglagesDTO.getPostRefOutilY());
-        r.setPostRefOutilZ(reglagesDTO.getPostRefOutilZ());
+        r.setPosRefOutilX(reglagesDTO.getPostRefOutilX());
+        r.setPosRefOutilY(reglagesDTO.getPostRefOutilY());
+        r.setPosRefOutilZ(reglagesDTO.getPostRefOutilZ());
 
         reglagesRepository.save(r);
     }
@@ -89,9 +88,9 @@ public class ReglagesController {
         r.setG1(planteOpt1.get());
         r.setG2(planteOpt2.get());
         r.setG3(planteOpt3.get());
-        r.setPostRefOutilX(reglagesDTO.getPostRefOutilX());
-        r.setPostRefOutilY(reglagesDTO.getPostRefOutilY());
-        r.setPostRefOutilZ(reglagesDTO.getPostRefOutilZ());
+        r.setPosRefOutilX(reglagesDTO.getPostRefOutilX());
+        r.setPosRefOutilY(reglagesDTO.getPostRefOutilY());
+        r.setPosRefOutilZ(reglagesDTO.getPostRefOutilZ());
 
         final Reglages updateReglages = reglagesRepository.save(r);
         return ResponseEntity.ok(updateReglages);
