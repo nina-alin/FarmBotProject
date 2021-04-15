@@ -4,6 +4,7 @@ import com.rostand.FarmBotWEBv2.Repository.MonitorRepository;
 import com.rostand.FarmBotWEBv2.SerialCommunication.SerialFarmBot;
 import jssc.SerialPortException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -168,6 +169,7 @@ public class MonitorController {
 
     // --------------------------------- PARTIE ACTIONNEURS ----------------------------------
 
+    @Scheduled(fixedRate = 10000)
     @PostMapping(value = "/monitor/actionneurs/pompeAEau")
     public void pompeAEau () {
         // code Alexis
@@ -210,6 +212,12 @@ public class MonitorController {
     }
 
     // --------------------------------------- CAMERA ---------------------------------------------
+
+    @Scheduled(fixedRate = 100000)
+    @PostMapping(value = "/monitor/camera/scanMauvaisesHerbes")
+    public void scanMauvaisesHerbes () {
+        // code Alexis
+    }
 
     // ---------------------------------------- OUTILS ---------------------------------------------
 

@@ -20,5 +20,5 @@ public class Action {
 
     // si la dernière action remonte à par exemple 5 minutes, alors un nouvel arrosage automatique se lance
     @Column(name = "timestamp", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    Timestamp datePlantation;
+    Timestamp dateAction;
 }

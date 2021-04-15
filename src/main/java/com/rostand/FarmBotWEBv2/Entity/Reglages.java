@@ -28,12 +28,12 @@ public class Reglages {
     private Plante G3;
 
     @Column
-    private int PostRefOutilX;
+    private int PosRefOutilX;
 
     @Column
-    private int PostRefOutilY;
+    private int PosRefOutilY;
 
     @Column
-    private int PostRefOutilZ;
+    private int PosRefOutilZ;
 }
 
