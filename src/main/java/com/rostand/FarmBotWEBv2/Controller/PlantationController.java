@@ -9,6 +9,7 @@ import com.rostand.FarmBotWEBv2.Exception.ResourceNotFoundException;
 import com.rostand.FarmBotWEBv2.Repository.ChampRepository;
 import com.rostand.FarmBotWEBv2.Repository.PlantationRepository;
 import com.rostand.FarmBotWEBv2.Repository.PlanteRepository;
+import com.rostand.FarmBotWEBv2.SerialCommunication.SerialFarmBot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
@@ -18,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+
+import static com.rostand.FarmBotWEBv2.constants.Constants.PositionsX;
+import static com.rostand.FarmBotWEBv2.constants.Constants.PositionsY;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -77,6 +81,19 @@ public class PlantationController {
         p.setPlante(selectedPlante);
         p.setChamp(champOpt.get());
 
+        // on déplace le FarmBot à la position de la plantation qui a été plantée
+        SerialFarmBot farmbot = null;
+        int posZ = 0;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+
+        farmbot.gotoXYZ(PositionsX[p.getX()], PositionsY[p.getY()], posZ);
+
         plantationRepository.save(p);
         return p;
     }
@@ -106,6 +123,19 @@ public class PlantationController {
         p.setY(plantationDTO.getY());
         p.setPlante(planteOpt.get());
 
+        // on déplace le FarmBot à la position de la plantation qui a été plantée
+        SerialFarmBot farmbot = null;
+        int posZ = 0;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+
+        farmbot.gotoXYZ(PositionsX[p.getX()], PositionsY[p.getY()], posZ);
+
         plantationRepository.save(p);
         return p;
     }
@@ -115,9 +145,14 @@ public class PlantationController {
     public ResponseEntity<?> deletePlantation(@PathVariable(value = "plantationId") Long plantationId,
                                               @PathVariable(value = "champId") Long champId) {
 
-        return plantationRepository.findByIdAndChampId(plantationId, champId).map(plantation -> {
-            plantationRepository.delete(plantation);
-            return ResponseEntity.ok().build();
-        }).orElseThrow(() -> new ResourceNotFoundException("Plantation non trouvée avec l'id " + plantationId + "et champId" + champId));
+        Optional<Plantation> plantationOptional = plantationRepository.findById(plantationId);
+        plantationOptional.orElseThrow(() -> new ResourceNotFoundException("Plantation" + plantationId + "not found"));
+
+        Plantation p = plantationOptional.get();
+
+        p.setPlante(null);
+
+        plantationRepository.save(p);
+        return ResponseEntity.ok().build();
     }
 }

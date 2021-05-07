@@ -13,6 +13,9 @@ public class Reglages {
     private long id;
 
     @Column
+    private int frequence_arrosage;
+
+    @Column
     private int frequence_scan;
 
     @OneToOne

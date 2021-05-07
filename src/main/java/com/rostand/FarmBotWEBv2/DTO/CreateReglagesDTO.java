@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class CreateReglagesDTO {
     private int frequence_scan;
+    private int frequence_arrosage;
     private Long G1;
     private Long G2;
     private Long G3;

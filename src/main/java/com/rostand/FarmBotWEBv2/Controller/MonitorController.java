@@ -169,7 +169,6 @@ public class MonitorController {
 
     // --------------------------------- PARTIE ACTIONNEURS ----------------------------------
 
-    @Scheduled(fixedRate = 10000)
     @PostMapping(value = "/monitor/actionneurs/pompeAEau")
     public void pompeAEau () {
         // code Alexis
