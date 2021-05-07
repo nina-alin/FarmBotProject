@@ -1,0 +1,68 @@
+package com.rostand.farmbotapi.Controller;
+
+import com.rostand.farmbotapi.DTO.CreatePlanteDTO;
+import com.rostand.farmbotapi.Entity.Plante;
+import com.rostand.farmbotapi.Exception.ResourceNotFoundException;
+import com.rostand.farmbotapi.Repository.PlanteRepository;
+import javassist.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
+@CrossOrigin(origins = "*")
+@RestController
+public class PlanteController {
+
+    // repository
+    @Autowired
+    PlanteRepository planteRepository;
+
+    // ------------------------ PARTIE GET / CREATE / UPDATE / DELETE PLANTE ------------------------
+
+    @GetMapping(path = "/plante/list")
+    public Object getPlantes(@RequestParam(required = false) Long planteId) throws ResourceNotFoundException {
+
+        if(!ObjectUtils.isEmpty(planteId)) {
+            return planteRepository.findPlanteById(planteId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Plante non trouvée pour l'id " + planteId));
+        }
+
+        return planteRepository.findAll();
+    }
+
+    @PostMapping(path = "/plante/create")
+    @ResponseBody
+    public void createPlante(@RequestBody CreatePlanteDTO planteDTO) {
+        Plante p = new Plante();
+
+        p.setNom(planteDTO.getNom());
+        p.setDescription(planteDTO.getDescription());
+
+        planteRepository.save(p);
+    }
+
+    @PutMapping(path = "plante/update/{planteId}")
+    public ResponseEntity<Plante> updatePlante(@PathVariable Long planteId,
+                                               @RequestBody CreatePlanteDTO planteDTO) throws NotFoundException {
+
+        Optional<Plante> planteOpt = planteRepository.findById(planteId);
+        planteOpt.orElseThrow(() -> new ResourceNotFoundException("Plante " + planteId + "not found"));
+
+        Plante p = planteOpt.get();
+
+        p.setNom(planteDTO.getNom());
+        p.setDescription(planteDTO.getDescription());
+
+        final Plante updatePlante = planteRepository.save(p);
+        return ResponseEntity.ok(p);
+    }
+
+    @PostMapping(path = "plante/delete/{id}")
+    @ResponseBody
+    public void deletePlante(@PathVariable Long id) {
+        planteRepository.deleteById(id);
+    }
+}
