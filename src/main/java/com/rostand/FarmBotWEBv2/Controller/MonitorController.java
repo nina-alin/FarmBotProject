@@ -152,8 +152,8 @@ public class MonitorController {
 
     // ------------------------------------- PARTIE DEPLACEMENT CASES ------------------------------
 
-    @PostMapping(value = "/monitor/deplacerCase/A1")
-    public void deplacerCaseA1() {
+    @PostMapping(value = "/monitor/deplacerCase/11")
+    public void deplacerCase11() {
         SerialFarmBot farmbot = null;
         int posX = 0, posY = 0, posZ = 0;
         String shell = System.getenv("SHELL");
