@@ -21,7 +21,7 @@ public class HistoriqueActionController {
     // ------------------------- PARTIE GET / CREATE ACTION ----------------------------
 
     // GET : pour avoir la liste des actions ou une action par id
-    @GetMapping(path = "/action/list")
+    @GetMapping(path = "/historiqueAction/list")
     public Object getHistoriqueAction(@RequestParam(required = false) Long historiqueActionId)
             throws ResourceNotFoundException {
 
@@ -33,7 +33,7 @@ public class HistoriqueActionController {
         return historiqueActionRepository.findAll();
     }
 
-    @PostMapping(path = "/action/create")
+    @PostMapping(path = "/historiqueAction/create")
     @ResponseBody
     public void createHistoriqueAction(@RequestBody CreateHistoriqueActionDTO historiqueActionDTO) {
         HistoriqueAction h = new HistoriqueAction();
