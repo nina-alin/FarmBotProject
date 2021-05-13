@@ -54,6 +54,7 @@ public class ReglagesController {
 
         Reglages r = new Reglages();
 
+        r.setFrequence_arrosage(reglagesDTO.getFrequence_arrosage());
         r.setFrequence_scan(reglagesDTO.getFrequence_scan());
         r.setG1(planteOpt1.get());
         r.setG2(planteOpt2.get());
@@ -84,6 +85,7 @@ public class ReglagesController {
 
         Reglages r = optionalReglages.get();
 
+        r.setFrequence_arrosage(reglagesDTO.getFrequence_arrosage());
         r.setFrequence_scan(reglagesDTO.getFrequence_scan());
         r.setG1(planteOpt1.get());
         r.setG2(planteOpt2.get());
