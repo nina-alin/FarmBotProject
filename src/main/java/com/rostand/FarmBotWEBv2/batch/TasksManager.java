@@ -8,14 +8,17 @@ import com.rostand.FarmBotWEBv2.Repository.ReglagesRepository;
 import com.rostand.FarmBotWEBv2.SerialCommunication.SerialFarmBot;
 import jssc.SerialPortException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Component
+@ConditionalOnExpression("${enableSchedule:true}")
 public class TasksManager {
 
     @Autowired
@@ -24,7 +27,7 @@ public class TasksManager {
     @Autowired
     HistoriqueActionRepository historiqueActionRepository;
 
-   // private final SerialFarmBot serial = SerialFarmBot.getInstance("/dev/ttyACM0");
+   private final SerialFarmBot serial = SerialFarmBot.getInstance("/dev/ttyACM0");
 
     // ??
     public TasksManager() throws SerialPortException, InterruptedException {
@@ -32,32 +35,34 @@ public class TasksManager {
 
     @Scheduled(fixedRate = 1000)
     public void checkWhatINeedToDo() throws SerialPortException {
-      //  Reglages reglages = reglagesRepository.getOne(1L);
+        Reglages reglages = reglagesRepository.getOne(65L);
 
 
         Timestamp lastAction = historiqueActionRepository.getDateActionArrosage(HistoriqueAction.eTypeAction.ARROSAGE);
 
-        LocalDateTime dtLastAction = lastAction.toLocalDateTime();
-        LocalDateTime dtNow = LocalDateTime.now();
+        long minutes = -1L;
+        if (lastAction != null){
+            LocalDateTime dtLastAction = lastAction.toLocalDateTime();
+            LocalDateTime dtNow = LocalDateTime.now();
+            minutes =  dtLastAction.until(dtNow, ChronoUnit.MINUTES);
+        }
 
-        long minutes =  dtLastAction.until(dtNow, ChronoUnit.MINUTES);
-/*
-        if (minutes > reglages.getFrequence_arrosage())
+        if (minutes > reglages.getFrequence_arrosage() || minutes == -1L)
         {
             // code Alexis arrosage
         }
 
-        if (minutes > reglages.getFrequence_scan())
+        if (minutes > reglages.getFrequence_scan() || minutes == -1L)
         {
             // code Alexis scan mauvaises herbes
-        }*/
+        }
     }
 
     // meme chose pour le scan des mauvaises herbes
 
-   /* @Scheduled(cron = "/5 * * * *")
+    @Scheduled(cron = "*/5 * * * * *")
     public void arrosage() throws SerialPortException {
         System.out.println("Arrosage");
         serial.envoyerOrdre("T02");
-    } */
+    }
 }

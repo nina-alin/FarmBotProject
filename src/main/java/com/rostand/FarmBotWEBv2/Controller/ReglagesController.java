@@ -39,33 +39,6 @@ public class ReglagesController {
         return reglagesRepository.findAll();
     }
 
-    @PostMapping(path = "/reglages/create")
-    @ResponseBody
-    public void createReglages(@RequestBody CreateReglagesDTO reglagesDTO) {
-
-        Optional<Plante> planteOpt1 = planteRepository.findById(reglagesDTO.getG1());
-        planteOpt1.orElseThrow(() -> new ResourceNotFoundException("Plante " + reglagesDTO.getG1() + "not found"));
-
-        Optional<Plante> planteOpt2 = planteRepository.findById(reglagesDTO.getG2());
-        planteOpt2.orElseThrow(() -> new ResourceNotFoundException("Plante " + reglagesDTO.getG2() + "not found"));
-
-        Optional<Plante> planteOpt3 = planteRepository.findById(reglagesDTO.getG3());
-        planteOpt3.orElseThrow(() -> new ResourceNotFoundException("Plante " + reglagesDTO.getG3() + "not found"));
-
-        Reglages r = new Reglages();
-
-        r.setFrequence_arrosage(reglagesDTO.getFrequence_arrosage());
-        r.setFrequence_scan(reglagesDTO.getFrequence_scan());
-        r.setG1(planteOpt1.get());
-        r.setG2(planteOpt2.get());
-        r.setG3(planteOpt3.get());
-        r.setPosRefOutilX(reglagesDTO.getPostRefOutilX());
-        r.setPosRefOutilY(reglagesDTO.getPostRefOutilY());
-        r.setPosRefOutilZ(reglagesDTO.getPostRefOutilZ());
-
-        reglagesRepository.save(r);
-    }
-
     @PutMapping(path = "/reglages/update/{reglagesId}")
     public ResponseEntity<Reglages> updateReglages(@PathVariable Long reglagesId,
                                                    @RequestBody CreateReglagesDTO reglagesDTO)
@@ -90,17 +63,8 @@ public class ReglagesController {
         r.setG1(planteOpt1.get());
         r.setG2(planteOpt2.get());
         r.setG3(planteOpt3.get());
-        r.setPosRefOutilX(reglagesDTO.getPostRefOutilX());
-        r.setPosRefOutilY(reglagesDTO.getPostRefOutilY());
-        r.setPosRefOutilZ(reglagesDTO.getPostRefOutilZ());
 
         final Reglages updateReglages = reglagesRepository.save(r);
         return ResponseEntity.ok(updateReglages);
-    }
-
-    @PostMapping(path = "/reglages/delete/{reglagesId}")
-    @ResponseBody
-    public void deleteReglages(@PathVariable Long reglagesId) {
-        reglagesRepository.deleteById(reglagesId);
     }
 }

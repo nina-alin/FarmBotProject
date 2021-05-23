@@ -29,14 +29,5 @@ public class Reglages {
     @OneToOne
     @JoinColumn(name = "plante_id3")
     private Plante G3;
-
-    @Column
-    private int PosRefOutilX;
-
-    @Column
-    private int PosRefOutilY;
-
-    @Column
-    private int PosRefOutilZ;
 }
 

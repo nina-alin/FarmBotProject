@@ -11,7 +11,4 @@ public class CreateReglagesDTO {
     private Long G1;
     private Long G2;
     private Long G3;
-    private int PostRefOutilX;
-    private int PostRefOutilY;
-    private int PostRefOutilZ;
 }

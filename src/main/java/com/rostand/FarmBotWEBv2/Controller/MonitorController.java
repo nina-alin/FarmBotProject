@@ -4,11 +4,12 @@ import com.rostand.FarmBotWEBv2.Repository.MonitorRepository;
 import com.rostand.FarmBotWEBv2.SerialCommunication.SerialFarmBot;
 import jssc.SerialPortException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import static com.rostand.FarmBotWEBv2.constants.Constants.*;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -20,9 +21,8 @@ public class MonitorController {
     // -------------------------------- PARTIE AXE X ---------------------------------
 
     @GetMapping(value = "/monitor/axeX/getPositionAxeX")
-    public int getPositionAxeX () {
+    public double getPositionAxeX () {
         SerialFarmBot farmbot=null;
-        int posX = 0, posY = 0, posZ = 0;
         String shell = System.getenv("SHELL");
 
         try {
@@ -31,9 +31,7 @@ public class MonitorController {
             er.printStackTrace();
         }
 
-        // code Alexis
-        int p = 0;
-        return p;
+        return farmbot.GetX();
     }
 
     @PostMapping(value = "/monitor/axeX/deplacePositionAxeX/up")
@@ -71,11 +69,18 @@ public class MonitorController {
     // -------------------------------- PARTIE AXE Y ---------------------------------
 
     @GetMapping(value = "/monitor/axeY/getPositionAxeY")
-    public int getPositionAxeY () {
-            // code Alexis
-            int p = 0;
-            return p;
+    public double getPositionAxeY () {
+        SerialFarmBot farmbot=null;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
         }
+
+        return farmbot.GetY();
+    }
 
     @PostMapping(value = "/monitor/axeY/deplacePositionAxeY/up")
     public void deplacePositionAxeYUp () {
@@ -109,13 +114,20 @@ public class MonitorController {
         farmbot.gotoXYZ(posX, posY, posZ);
     }
 
-        // -------------------------------- PARTIE AXE Z ---------------------------------
+    // -------------------------------- PARTIE AXE Z ---------------------------------
 
     @GetMapping(value = "/monitor/axeZ/getPositionAxeZ")
-    public int getPositionAxeZ () {
-        // code Alexis
-        int p = 0;
-        return p;
+    public double getPositionAxeZ () {
+        SerialFarmBot farmbot=null;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+
+        return farmbot.GetZ();
     }
 
     @PostMapping(value = "/monitor/axeZ/deplacePositionAxeZ/up")
@@ -150,12 +162,11 @@ public class MonitorController {
         farmbot.gotoXYZ(posX, posY, posZ);
     }
 
-    // ------------------------------------- PARTIE DEPLACEMENT CASES ------------------------------
+    // -------------------------------- RETOUR A ZERO ---------------------------------
 
-    @PostMapping(value = "/monitor/deplacerCase/11")
-    public void deplacerCase11() {
+    @PostMapping(value = "/monitor/RAZ")
+    public void RAZ() throws SerialPortException {
         SerialFarmBot farmbot = null;
-        int posX = 0, posY = 0, posZ = 0;
         String shell = System.getenv("SHELL");
 
         try {
@@ -164,25 +175,102 @@ public class MonitorController {
             er.printStackTrace();
         }
 
-        farmbot.gotoXYZ(300, 1050, posZ);
+        farmbot.razXYZ();
     }
 
     // --------------------------------- PARTIE ACTIONNEURS ----------------------------------
 
-    @PostMapping(value = "/monitor/actionneurs/pompeAEau")
-    public void pompeAEau () {
-        // code Alexis
+    @PostMapping(value = "/monitor/actionneurs/desherbeur/prendre")
+    public void desherbeurOn () {
+        SerialFarmBot farmbot = null;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+
+        farmbot.Prendreoutil(desherbeur);
     }
 
-    @PostMapping(value = "/monitor/actionneurs/pompeAAir")
-    public void pompeAAir () {
-        // code Alexis
+
+    @PostMapping(value = "/monitor/actionneurs/desherbeur/deposer")
+    public void desherbeurOff () {
+        SerialFarmBot farmbot = null;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+
+        farmbot.Deposeoutil(desherbeur);
+    }
+
+
+    @PostMapping(value = "/monitor/actionneurs/scanner/prendre")
+    public void scannerOn () {
+        SerialFarmBot farmbot = null;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+
+        farmbot.Prendreoutil(scanner);
+    }
+
+    @PostMapping(value = "/monitor/actionneurs/scanner/deposer")
+    public void scannerOff () {
+        SerialFarmBot farmbot = null;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+
+        farmbot.Deposeoutil(scanner);
+    }
+
+    @PostMapping(value = "/monitor/actionneurs/semeur/prendre")
+    public void semeurOn () {
+        SerialFarmBot farmbot = null;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+
+        farmbot.Prendreoutil(semeur);
+    }
+
+
+    @PostMapping(value = "/monitor/actionneurs/semeur/deposer")
+    public void semeurOff () {
+
+        SerialFarmBot farmbot = null;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+
+        farmbot.Deposeoutil(semeur);
     }
 
     @PostMapping(value = "/monitor/actionneurs/lumiere/on")
     public void lumiereOn () throws SerialPortException {
         SerialFarmBot farmbot = null;
-        int posX = 0, posY = 0, posZ = 0;
         String shell = System.getenv("SHELL");
 
         try {
@@ -198,7 +286,6 @@ public class MonitorController {
     public void lumiereOff () throws SerialPortException {
 
         SerialFarmBot farmbot = null;
-        int posX = 0, posY = 0, posZ = 0;
         String shell = System.getenv("SHELL");
 
         try {
@@ -210,14 +297,57 @@ public class MonitorController {
         farmbot.envoyerOrdre("F41 P7 V0 M0 Q0");
     }
 
-    // --------------------------------------- CAMERA ---------------------------------------------
+    @PostMapping(value = "/monitor/actionneurs/arrosage")
+    public void arrosage () throws SerialPortException {
 
-    @Scheduled(fixedRate = 100000)
-    @PostMapping(value = "/monitor/camera/scanMauvaisesHerbes")
-    public void scanMauvaisesHerbes () {
-        // code Alexis
+        SerialFarmBot farmbot = null;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
     }
 
-    // ---------------------------------------- OUTILS ---------------------------------------------
+    // --------------------------------------- CAMERA ---------------------------------------------
 
+    @PostMapping(value = "/monitor/camera/on")
+    public void cameraOn () throws SerialPortException {
+
+        SerialFarmBot farmbot = null;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+    }
+
+    @PostMapping(value = "/monitor/camera/off")
+    public void cameraOff () throws SerialPortException {
+
+        SerialFarmBot farmbot = null;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+    }
+
+    @PostMapping(value = "/monitor/scanMauvaisesHerbes")
+    public void scanMauvaisesHerbes () throws SerialPortException {
+
+        SerialFarmBot farmbot = null;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+    }
 }

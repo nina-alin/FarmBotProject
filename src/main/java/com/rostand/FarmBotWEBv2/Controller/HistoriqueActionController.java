@@ -33,14 +33,4 @@ public class HistoriqueActionController {
         return historiqueActionRepository.findAll();
     }
 
-    @PostMapping(path = "/historiqueAction/create")
-    @ResponseBody
-    public void createHistoriqueAction(@RequestBody CreateHistoriqueActionDTO historiqueActionDTO) {
-        HistoriqueAction h = new HistoriqueAction();
-
-        h.setTypeAction(historiqueActionDTO.getTypeAction());
-
-        historiqueActionRepository.save(h);
-    }
-
 }
