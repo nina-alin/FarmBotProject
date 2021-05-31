@@ -46,8 +46,7 @@ public class MonitorController {
             er.printStackTrace();
         }
 
-        posX += 100;
-        farmbot.gotoXYZ(posX, posY, posZ);
+        farmbot.gotoXYZ(farmbot.GetX() + 100, farmbot.GetY()+0, farmbot.GetZ()+0);
     }
 
     @PostMapping(value = "/monitor/axeX/deplacePositionAxeX/down")
@@ -62,8 +61,7 @@ public class MonitorController {
             er.printStackTrace();
         }
 
-        posX -= 100;
-        farmbot.gotoXYZ(posX, posY, posZ);
+        farmbot.gotoXYZ(farmbot.GetX()-100, farmbot.GetY()+0, farmbot.GetZ()+0);
     }
 
     // -------------------------------- PARTIE AXE Y ---------------------------------
@@ -94,8 +92,7 @@ public class MonitorController {
             er.printStackTrace();
         }
 
-        posY += 50;
-        farmbot.gotoXYZ(posX, posY, posZ);
+        farmbot.gotoXYZ(farmbot.GetX()+0, farmbot.GetY()+50, farmbot.GetZ()+0);
     }
 
     @PostMapping(value = "/monitor/axeY/deplacePositionAxeY/down")
@@ -110,8 +107,7 @@ public class MonitorController {
             er.printStackTrace();
         }
 
-        posY -= 50;
-        farmbot.gotoXYZ(posX, posY, posZ);
+        farmbot.gotoXYZ(farmbot.GetX()+0, farmbot.GetY()-50, farmbot.GetZ());
     }
 
     // -------------------------------- PARTIE AXE Z ---------------------------------
@@ -133,7 +129,6 @@ public class MonitorController {
     @PostMapping(value = "/monitor/axeZ/deplacePositionAxeZ/up")
     public void deplacePositionAxeZUp () {
         SerialFarmBot farmbot = null;
-        int posX = 0, posY = 0, posZ = 0;
         String shell = System.getenv("SHELL");
 
         try {
@@ -142,8 +137,7 @@ public class MonitorController {
             er.printStackTrace();
         }
 
-        posZ += 10;
-        farmbot.gotoXYZ(posX, posY, posZ);
+        farmbot.gotoXYZ(farmbot.GetX()+0, farmbot.GetY()+0, farmbot.GetZ()+10);
     }
 
     @PostMapping(value = "/monitor/axeZ/deplacePositionAxeZ/down")
@@ -159,7 +153,7 @@ public class MonitorController {
         }
 
         posZ -= 10;
-        farmbot.gotoXYZ(posX, posY, posZ);
+        farmbot.gotoXYZ(farmbot.GetX()+0, farmbot.GetY()+0, farmbot.GetZ()-10);
     }
 
     // -------------------------------- RETOUR A ZERO ---------------------------------

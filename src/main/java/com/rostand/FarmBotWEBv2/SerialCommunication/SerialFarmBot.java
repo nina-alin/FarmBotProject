@@ -300,6 +300,9 @@ public class SerialFarmBot {
             razZ();
             razY();
             razX();
+            razZ();
+            razY();
+            razX();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
