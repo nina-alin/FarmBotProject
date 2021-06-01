@@ -291,8 +291,8 @@ public class MonitorController {
         farmbot.envoyerOrdre("F41 P7 V0 M0 Q0");
     }
 
-    @PostMapping(value = "/monitor/actionneurs/arrosage")
-    public void arrosage () throws SerialPortException {
+    @PostMapping(value = "/monitor/actionneurs/arrosage/on")
+    public void arrosageOn () throws SerialPortException {
 
         SerialFarmBot farmbot = null;
         String shell = System.getenv("SHELL");
@@ -302,6 +302,52 @@ public class MonitorController {
         } catch (Exception er) {
             er.printStackTrace();
         }
+        farmbot.envoyerOrdre("F41 P8 V1 M0 Q0");
+    }
+
+    @PostMapping(value = "/monitor/actionneurs/arrosage/off")
+    public void arrosageOff() throws SerialPortException {
+
+        SerialFarmBot farmbot = null;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+
+        farmbot.envoyerOrdre("F41 P8 V0 M0 Q0");
+    }
+
+    @PostMapping(value = "/monitor/actionneurs/air/off")
+    public void airOff() throws SerialPortException {
+
+        SerialFarmBot farmbot = null;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+
+        farmbot.envoyerOrdre("F41 P9 V0 M0 Q0");
+    }
+
+    @PostMapping(value = "/monitor/actionneurs/air/on")
+    public void airOn() throws SerialPortException {
+
+        SerialFarmBot farmbot = null;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+
+        farmbot.envoyerOrdre("F41 P9 V1 M0 Q0");
     }
 
     // --------------------------------------- CAMERA ---------------------------------------------
@@ -343,5 +389,19 @@ public class MonitorController {
         } catch (Exception er) {
             er.printStackTrace();
         }
+    }
+
+    @PostMapping(value = "/monitor/prendreGraine")
+    public void prendreGraines () throws SerialPortException {
+        SerialFarmBot farmbot = null;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+
+        farmbot.prendreGraine();
     }
 }

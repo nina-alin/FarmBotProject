@@ -314,6 +314,7 @@ public class SerialFarmBot {
 
         double posY = outilPosY + outilEcartY * (numOutil -1);  //test double remplace int
 
+        gotoXYZ(100, posY, outilPosZBas+50);
         gotoXYZ(18, posY, outilPosZBas);
         gotoXYZ(100, posY, outilPosZBas);
         gotoXYZ(100, posY, outilPosZHaut);
@@ -350,5 +351,20 @@ public class SerialFarmBot {
         gotoXYZ(18, posY, outilPosZHaut);
 
 
+    }
+
+    public void prendreGraine() throws SerialPortException {
+        double posY = outilPosY + 100 ;
+
+        gotoXYZ(18, posY, outilPosZBas);
+        gotoXYZ(100, posY, outilPosZBas);
+        gotoXYZ(100, posY, outilPosZHaut);
+        gotoXYZ(100, 700, -380);
+        gotoXYZ(100, 700, -320);
+        gotoXYZ(0, 700, -320);
+        gotoXYZ(0, 700, -380);
+        envoyerOrdre("F41 P9 V1 M0 Q0");
+        gotoXYZ(0, 700, -320);
+        gotoXYZ(100, 700, -320);
     }
 }

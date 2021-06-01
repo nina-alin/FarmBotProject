@@ -10,6 +10,7 @@ import com.rostand.FarmBotWEBv2.Repository.ChampRepository;
 import com.rostand.FarmBotWEBv2.Repository.PlantationRepository;
 import com.rostand.FarmBotWEBv2.Repository.PlanteRepository;
 import com.rostand.FarmBotWEBv2.SerialCommunication.SerialFarmBot;
+import jssc.SerialPortException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
@@ -86,7 +87,7 @@ public class PlantationController {
     @PutMapping(path = "/champ/{champId}/plantation/update/{plantationId}")
     public Plantation updatePlantation(@PathVariable(value = "champId") Long champId,
                                        @PathVariable(value = "plantationId") Long plantationId,
-                                       @RequestBody CreatePlantationDTO plantationDTO) throws InterruptedException {
+                                       @RequestBody CreatePlantationDTO plantationDTO) throws InterruptedException, SerialPortException {
 
         Optional<Champ> champOpt = champRepository.findById(champId);
         champOpt.orElseThrow(() -> new ResourceNotFoundException("Champ " + champId + "not found"));
@@ -118,10 +119,11 @@ public class PlantationController {
             er.printStackTrace();
         }
 
-        farmbot.Prendreoutil(semeur);
+        farmbot.prendreGraine();
         Thread.sleep(500);
         farmbot.gotoXYZ(PositionsX[p.getX()-1], PositionsY[p.getY()-1], posZ);
         Thread.sleep(500);
+        farmbot.envoyerOrdre("F41 P9 V0 M0 Q0");
         farmbot.Deposeoutil(semeur);
         Thread.sleep(500);
         farmbot.razXYZ();
