@@ -79,9 +79,10 @@ public class SerialFarmBot {
                         statusCommand = "R04";
                     }
                     if (line.contains("R82")) {
-                        String[] tab = line.split(" "); //Split "R82 X-4.2 Y32.3 Z40.0
+                            String[] tab = line.split(" "); //Split "R82 X-4.2 Y32.3 Z40.0
                         /*if (tab.length == 4)
                         {*/
+                        try {
                             String sX = tab[1].substring(1); //"X-4.2" -> "-4.2"
                             // sX=sX.replace(".",",");
                             X = Double.valueOf(sX);
@@ -91,6 +92,9 @@ public class SerialFarmBot {
                             String sZ = tab[3].substring(1); //"X-4.2" -> "-4.2"
                             // sZ=sZ.replace(".",",");
                             Z = Double.valueOf(sZ);
+                        } catch (Exception e) {
+                            System.out.println("Erreur de récupération des valeurs");
+                        }
                         //}
                     }
 //                    System.out.print("Retrieved X:"+X+", Y:"+Y+", Z:"+Z);

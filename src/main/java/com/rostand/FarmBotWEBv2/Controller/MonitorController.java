@@ -13,6 +13,7 @@ import com.rostand.FarmBotWEBv2.Repository.PlanteRepository;
 import com.rostand.FarmBotWEBv2.SerialCommunication.SerialFarmBot;
 import jssc.SerialPortException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.StreamingHttpOutputMessage;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -434,8 +435,7 @@ public class MonitorController {
 
     @PostMapping(value = "/monitor/arroser/champ/{champId}/plantation/{plantationId}")
     public void arroserCase (@PathVariable(value = "champId") Long champId,
-                             @PathVariable(value = "plantationId") Long plantationId,
-                             @RequestBody CreatePlantationDTO plantationDTO) throws SerialPortException, InterruptedException {
+                             @PathVariable(value = "plantationId") Long plantationId) throws SerialPortException, InterruptedException {
 
         SerialFarmBot farmbot = null;
         String shell = System.getenv("SHELL");
@@ -452,12 +452,18 @@ public class MonitorController {
         Optional<Plantation> plantationOptional = plantationRepository.findById(plantationId);
         plantationOptional.orElseThrow(() -> new ResourceNotFoundException("Plantation" + plantationId + "not found"));
 
-        double posZ=-350;
+        Plantation p = plantationOptional.get();
+
+        if (!p.getChamp().getId().equals(champId)){
+            throw new BadRequestException("Le champ de la plantation(" + p.getChamp().getNom() + ") ne correspond pas au champ en paramètres (" +champOpt.get().getNom()+ ")");
+        }
+
         farmbot.Prendreoutil(arroseur);
-        farmbot.gotoXYZ(PositionsX[(plantationDTO.getX())-1], (plantationDTO.getY())-1, posZ);
+        farmbot.gotoXYZ(PositionsX[p.getX()]-1, PositionsX[p.getY()]-1, -350);
         farmbot.envoyerOrdre("F41 P8 V1 M0 Q0");
         sleep(1000);
         farmbot.envoyerOrdre("F41 P8 V0 M0 Q0");
+        farmbot.Deposeoutil(arroseur);
         farmbot.razXYZ();
     }
 
