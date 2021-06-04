@@ -1,22 +1,35 @@
 package com.rostand.FarmBotWEBv2.Controller;
 
+import com.rostand.FarmBotWEBv2.DTO.CreatePlantationDTO;
+import com.rostand.FarmBotWEBv2.Entity.Champ;
+import com.rostand.FarmBotWEBv2.Entity.Plantation;
+import com.rostand.FarmBotWEBv2.Entity.Plante;
+import com.rostand.FarmBotWEBv2.Exception.BadRequestException;
+import com.rostand.FarmBotWEBv2.Exception.ResourceNotFoundException;
+import com.rostand.FarmBotWEBv2.Repository.ChampRepository;
 import com.rostand.FarmBotWEBv2.Repository.MonitorRepository;
+import com.rostand.FarmBotWEBv2.Repository.PlantationRepository;
+import com.rostand.FarmBotWEBv2.Repository.PlanteRepository;
 import com.rostand.FarmBotWEBv2.SerialCommunication.SerialFarmBot;
 import jssc.SerialPortException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 import static com.rostand.FarmBotWEBv2.constants.Constants.*;
+import static java.lang.Thread.sleep;
 
 @CrossOrigin(origins = "*")
 @RestController
 public class MonitorController {
 
     @Autowired
-    MonitorRepository monitorRepository;
+    ChampRepository champRepository;
+
+    @Autowired
+    PlantationRepository plantationRepository;
+
 
     // -------------------------------- PARTIE AXE X ---------------------------------
 
@@ -204,8 +217,8 @@ public class MonitorController {
     }
 
 
-    @PostMapping(value = "/monitor/actionneurs/scanner/prendre")
-    public void scannerOn () {
+    @PostMapping(value = "/monitor/actionneurs/arroseur/prendre")
+    public void arroseurOn () {
         SerialFarmBot farmbot = null;
         String shell = System.getenv("SHELL");
 
@@ -215,11 +228,11 @@ public class MonitorController {
             er.printStackTrace();
         }
 
-        farmbot.Prendreoutil(scanner);
+        farmbot.Prendreoutil(arroseur);
     }
 
-    @PostMapping(value = "/monitor/actionneurs/scanner/deposer")
-    public void scannerOff () {
+    @PostMapping(value = "/monitor/actionneurs/arroseur/deposer")
+    public void arroseurOff () {
         SerialFarmBot farmbot = null;
         String shell = System.getenv("SHELL");
 
@@ -229,7 +242,7 @@ public class MonitorController {
             er.printStackTrace();
         }
 
-        farmbot.Deposeoutil(scanner);
+        farmbot.Deposeoutil(arroseur);
     }
 
     @PostMapping(value = "/monitor/actionneurs/semeur/prendre")
@@ -403,5 +416,62 @@ public class MonitorController {
         }
 
         farmbot.prendreGraine();
+    }
+
+    @PostMapping(value = "/monitor/arroser")
+    public void arroser () throws SerialPortException, InterruptedException {
+        SerialFarmBot farmbot = null;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+
+        farmbot.arrosage();
+    }
+
+    @PostMapping(value = "/monitor/arroser/champ/{champId}/plantation/{plantationId}")
+    public void arroserCase (@PathVariable(value = "champId") Long champId,
+                             @PathVariable(value = "plantationId") Long plantationId,
+                             @RequestBody CreatePlantationDTO plantationDTO) throws SerialPortException, InterruptedException {
+
+        SerialFarmBot farmbot = null;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+
+        Optional<Champ> champOpt = champRepository.findById(champId);
+        champOpt.orElseThrow(() -> new ResourceNotFoundException("Champ " + champId + "not found"));
+
+        Optional<Plantation> plantationOptional = plantationRepository.findById(plantationId);
+        plantationOptional.orElseThrow(() -> new ResourceNotFoundException("Plantation" + plantationId + "not found"));
+
+        double posZ=-350;
+        farmbot.Prendreoutil(arroseur);
+        farmbot.gotoXYZ(PositionsX[(plantationDTO.getX())-1], (plantationDTO.getY())-1, posZ);
+        farmbot.envoyerOrdre("F41 P8 V1 M0 Q0");
+        sleep(1000);
+        farmbot.envoyerOrdre("F41 P8 V0 M0 Q0");
+        farmbot.razXYZ();
+    }
+
+    @PostMapping(value = "/monitor/scanner")
+    public void scanner () throws SerialPortException {
+        SerialFarmBot farmbot = null;
+        String shell = System.getenv("SHELL");
+
+        try {
+            farmbot = SerialFarmBot.getInstance("/dev/ttyACM0");
+        } catch (Exception er) {
+            er.printStackTrace();
+        }
+
+        farmbot.scanMauvaisesHerbes();
     }
 }

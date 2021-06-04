@@ -6,6 +6,9 @@ import jssc.SerialPortException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.rostand.FarmBotWEBv2.constants.Constants.*;
+import static java.lang.Thread.sleep;
+
 // la classe principale qui permet de faire la communication en série
 public class SerialFarmBot {
 
@@ -59,7 +62,7 @@ public class SerialFarmBot {
                     if (line.contains("R02")) {
                         statusCommand = "R02";
                         try {
-                            Thread.sleep(400);
+                            sleep(400);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -67,7 +70,7 @@ public class SerialFarmBot {
                     if (line.contains("R03")) {
                         statusCommand = "R03";
                         try {
-                            Thread.sleep(400);
+                            sleep(400);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -133,7 +136,7 @@ public class SerialFarmBot {
         while ((statusCommand != "R02") && (statusCommand != "R03") && (time < timeOut))// attendre fin de commande avec succès
         {
             try {
-                Thread.sleep(100);
+                sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -161,7 +164,7 @@ public class SerialFarmBot {
         String firstMessage;
         do {
             System.out.println("********************isstarted*****************");
-            Thread.sleep(500);
+            sleep(500);
         } while (!isStarted);
 
         System.out.println("**********************Startup completed********************");
@@ -229,14 +232,14 @@ public class SerialFarmBot {
         }
         do {
             previousX = X;
-            Thread.sleep(1000);
+            sleep(1000);
             System.out.println("Position X précédente : " + previousX);
             System.out.println("Position X actuelle : " + X);
             maxAttente--;
 
         } while (X != previousX && maxAttente > 0);
         try {
-            Thread.sleep((long) (X * 100)); // attente après un deplacement
+            sleep((long) (X * 100)); // attente après un deplacement
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -253,7 +256,7 @@ public class SerialFarmBot {
 
         do {
             previousY = Y;
-            Thread.sleep(1000);
+            sleep(1000);
             System.out.println("Position Y précédente : " + previousY);
             System.out.println("Position Y actuelle : " + Y);
             maxAttente--;
@@ -277,7 +280,7 @@ public class SerialFarmBot {
         }
         do {
             previousZ = Z;
-            Thread.sleep(1000);
+            sleep(1000);
             System.out.println("Position Z précédente : " + previousZ);
             System.out.println("Position Z actuelle : " + Z);
             maxAttente--;
@@ -349,8 +352,6 @@ public class SerialFarmBot {
         gotoXYZ(100, posY, outilPosZBas+numOutil);
         gotoXYZ(18, posY, outilPosZBas+numOutil);
         gotoXYZ(18, posY, outilPosZHaut);
-
-
     }
 
     public void prendreGraine() throws SerialPortException {
@@ -366,5 +367,109 @@ public class SerialFarmBot {
         envoyerOrdre("F41 P9 V1 M0 Q0");
         gotoXYZ(0, 700, -320);
         gotoXYZ(100, 700, -320);
+    }
+
+    // code Nina
+    public void arrosage() throws SerialPortException, InterruptedException {
+
+        double posZ=-350;
+        gotoXYZ(PositionsX[0], PositionsY[0], posZ);
+        envoyerOrdre("F41 P8 V1 M0 Q0");
+        sleep(1000);
+        envoyerOrdre("F41 P8 V0 M0 Q0");
+        gotoXYZ(PositionsX[1], PositionsY[0], posZ);
+        envoyerOrdre("F41 P8 V1 M0 Q0");
+        sleep(1000);
+        envoyerOrdre("F41 P8 V0 M0 Q0");
+        gotoXYZ(PositionsX[2], PositionsY[0], posZ);
+        envoyerOrdre("F41 P8 V1 M0 Q0");
+        sleep(1000);
+        envoyerOrdre("F41 P8 V0 M0 Q0");
+        gotoXYZ(PositionsX[3], PositionsY[0], posZ);
+        envoyerOrdre("F41 P8 V1 M0 Q0");
+        sleep(1000);
+        envoyerOrdre("F41 P8 V0 M0 Q0");
+        gotoXYZ(PositionsX[4], PositionsY[0], posZ);
+        envoyerOrdre("F41 P8 V1 M0 Q0");
+        sleep(1000);
+        envoyerOrdre("F41 P8 V0 M0 Q0");
+        gotoXYZ(PositionsX[5], PositionsY[0], posZ);
+        envoyerOrdre("F41 P8 V1 M0 Q0");
+        sleep(1000);
+        envoyerOrdre("F41 P8 V0 M0 Q0");
+        gotoXYZ(PositionsX[5], PositionsY[1], posZ);
+        envoyerOrdre("F41 P8 V1 M0 Q0");
+        sleep(1000);
+        envoyerOrdre("F41 P8 V0 M0 Q0");
+        gotoXYZ(PositionsX[4], PositionsY[1], posZ);
+        envoyerOrdre("F41 P8 V1 M0 Q0");
+        sleep(1000);
+        envoyerOrdre("F41 P8 V0 M0 Q0");
+        gotoXYZ(PositionsX[3], PositionsY[1], posZ);
+        envoyerOrdre("F41 P8 V1 M0 Q0");
+        sleep(1000);
+        envoyerOrdre("F41 P8 V0 M0 Q0");
+        gotoXYZ(PositionsX[2], PositionsY[1], posZ);
+        envoyerOrdre("F41 P8 V1 M0 Q0");
+        sleep(1000);
+        envoyerOrdre("F41 P8 V0 M0 Q0");
+        gotoXYZ(PositionsX[1], PositionsY[1], posZ);
+        envoyerOrdre("F41 P8 V1 M0 Q0");
+        sleep(1000);
+        envoyerOrdre("F41 P8 V0 M0 Q0");
+        gotoXYZ(PositionsX[0], PositionsY[1], posZ);
+        envoyerOrdre("F41 P8 V1 M0 Q0");
+        sleep(1000);
+        envoyerOrdre("F41 P8 V0 M0 Q0");
+        gotoXYZ(PositionsX[0], PositionsY[2], posZ);
+        envoyerOrdre("F41 P8 V1 M0 Q0");
+        sleep(1000);
+        envoyerOrdre("F41 P8 V0 M0 Q0");
+        gotoXYZ(PositionsX[1], PositionsY[2], posZ);
+        envoyerOrdre("F41 P8 V1 M0 Q0");
+        sleep(1000);
+        envoyerOrdre("F41 P8 V0 M0 Q0");
+        gotoXYZ(PositionsX[2], PositionsY[2], posZ);
+        envoyerOrdre("F41 P8 V1 M0 Q0");
+        sleep(1000);
+        envoyerOrdre("F41 P8 V0 M0 Q0");
+        gotoXYZ(PositionsX[3], PositionsY[2], posZ);
+        envoyerOrdre("F41 P8 V1 M0 Q0");
+        sleep(1000);
+        envoyerOrdre("F41 P8 V0 M0 Q0");
+        gotoXYZ(PositionsX[4], PositionsY[2], posZ);
+        envoyerOrdre("F41 P8 V1 M0 Q0");
+        sleep(1000);
+        envoyerOrdre("F41 P8 V0 M0 Q0");
+        gotoXYZ(PositionsX[5], PositionsY[2], posZ);
+        envoyerOrdre("F41 P8 V1 M0 Q0");
+        sleep(1000);
+        envoyerOrdre("F41 P8 V0 M0 Q0");
+        razXYZ();
+    }
+
+    public void scanMauvaisesHerbes() throws SerialPortException {
+        double posZ=-350;
+        // allumer la caméra
+        gotoXYZ(PositionsX[0], PositionsY[0], posZ);
+        gotoXYZ(PositionsX[1], PositionsY[0], posZ);
+        gotoXYZ(PositionsX[2], PositionsY[0], posZ);
+        gotoXYZ(PositionsX[3], PositionsY[0], posZ);
+        gotoXYZ(PositionsX[4], PositionsY[0], posZ);
+        gotoXYZ(PositionsX[5], PositionsY[0], posZ);
+        gotoXYZ(PositionsX[5], PositionsY[1], posZ);
+        gotoXYZ(PositionsX[4], PositionsY[1], posZ);
+        gotoXYZ(PositionsX[3], PositionsY[1], posZ);
+        gotoXYZ(PositionsX[2], PositionsY[1], posZ);
+        gotoXYZ(PositionsX[1], PositionsY[1], posZ);
+        gotoXYZ(PositionsX[0], PositionsY[1], posZ);
+        gotoXYZ(PositionsX[0], PositionsY[2], posZ);
+        gotoXYZ(PositionsX[1], PositionsY[2], posZ);
+        gotoXYZ(PositionsX[2], PositionsY[2], posZ);
+        gotoXYZ(PositionsX[3], PositionsY[2], posZ);
+        gotoXYZ(PositionsX[4], PositionsY[2], posZ);
+        gotoXYZ(PositionsX[5], PositionsY[2], posZ);
+        // éteindre la caméra
+        razXYZ();
     }
 }

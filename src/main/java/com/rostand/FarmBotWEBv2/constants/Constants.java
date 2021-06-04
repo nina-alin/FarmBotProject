@@ -8,5 +8,5 @@ public class Constants {
 
     public static int desherbeur = 1;
     public static int semeur = 2;
-    public static int scanner = 3;
+    public static int arroseur = 3;
 }

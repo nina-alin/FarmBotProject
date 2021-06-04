@@ -7,6 +7,7 @@ import com.rostand.FarmBotWEBv2.Repository.HistoriqueActionRepository;
 import com.rostand.FarmBotWEBv2.Repository.ReglagesRepository;
 import com.rostand.FarmBotWEBv2.SerialCommunication.SerialFarmBot;
 import jssc.SerialPortException;
+import net.bytebuddy.description.type.TypeDescription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -34,7 +35,8 @@ public class TasksManager {
     }
 
     @Scheduled(fixedRate = 1000)
-    public void checkWhatINeedToDo() throws SerialPortException {
+    public void checkWhatINeedToDo() throws SerialPortException, InterruptedException {
+        SerialFarmBot farmbot = null;
         Reglages reglages = reglagesRepository.getOne(65L);
 
 
@@ -49,12 +51,12 @@ public class TasksManager {
 
         if (minutes > reglages.getFrequence_arrosage() || minutes == -1L)
         {
-            // code Alexis arrosage
+            farmbot.arrosage();
         }
 
         if (minutes > reglages.getFrequence_scan() || minutes == -1L)
         {
-            // code Alexis scan mauvaises herbes
+            farmbot.scanMauvaisesHerbes();
         }
     }
 
